@@ -1,6 +1,22 @@
 import struct
+import time
 
 
+
+
+
+class OnlineDevice:
+    def __init__(self):
+        self.address:tuple = None
+        self.time:int =  time.time()
+        self.name:str = None
+        self.message:MessageUDP = None
+
+
+
+
+
+# Messaging structures
 
 class CommandType:
 
@@ -103,6 +119,15 @@ class Command:
 
 class Discovery: # this is only relevent if you are decoding the message
     def __init__(self):
+        pass
+
+    def to_bytes(self):
+        data = b""
+        return data
+
+
+class Online: # this is only relevent if you are decoding the message
+    def __init__(self):
         self.led_number:int = None # 8 bytes
 
     def to_bytes(self):
@@ -111,10 +136,12 @@ class Discovery: # this is only relevent if you are decoding the message
         return data
 
 
+
 class MessageTypes:
     command:int = 1
     information:int = 2
     discovery:int = 3
+    online:int = 4
 
 
 

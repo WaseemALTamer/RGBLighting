@@ -1,4 +1,4 @@
-from .MessageHandler import MessageHandler
+from .MessageManager import MessageManager
 from . import Config
 import socket
 
@@ -9,14 +9,15 @@ import socket
 
 
 
-class Netowrk:
+class Network:
     def __init__(self):
         
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         self.server_socket.bind((Config.IP, Config.PORT))
+        
 
-        self.message_handler = MessageHandler()
+        self.message_manager = MessageManager() # network will contain its own message Manager
 
         self.is_receiving = False
 
@@ -29,7 +30,7 @@ class Netowrk:
         while self.is_receiving:
             try:
                 data, addr = self.server_socket.recvfrom(1024)
-                self.message_handler.handel_message(data, addr)
+                self.message_manager.handel_message(data, addr)
 
             except Exception as e:
                 print(f"Receive error: {e}")

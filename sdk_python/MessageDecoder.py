@@ -11,7 +11,7 @@ class MessageDecoder:
         pass
 
 
-    def decode_message(self, payload:bytes):
+    def decode_message(self, payload:bytes) -> MessageUDP:
         if len(payload) < 72:
             return None
 
@@ -46,8 +46,8 @@ class MessageDecoder:
         elif message.type == MessageTypes.information:
             message.content = self.decode_information(content)
 
-        elif message.type == MessageTypes.discovery:
-            message.content = self.decode_discovery(content)
+        elif message.type == MessageTypes.online:
+            message.content = self.decode_online(content)
 
         return message
 
@@ -60,12 +60,12 @@ class MessageDecoder:
     def decode_information(self, payload:bytes):
         pass
 
-    def decode_discovery(self, payload:bytes):
+    def decode_online(self, payload:bytes):
         if len(payload) < 8:
             return None
 
-        discovery = Discovery()
-        discovery.led_number = int.from_bytes(payload[0:8], "big")
+        online = Online()
+        online.led_number = int.from_bytes(payload[0:8], "big")
 
-        return discovery
+        return online
 
