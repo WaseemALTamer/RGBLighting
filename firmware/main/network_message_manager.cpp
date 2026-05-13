@@ -212,11 +212,12 @@ namespace MessageManager{
 
 
         const uint8_t discovery = 3;
+        const uint8_t online = 4;
         void decode_discovery_message(uint8_t* data, int len, IPAddress senderIP, int senderPort){
             uint8_t buffer[128];
             int index = 0;
 
-            buffer[index++] = discovery; // get the discovery refrence command
+            buffer[index++] = online; // get the discovery refrence command
 
             uint64_t mac = ESP.getEfuseMac();
             for (int i = 0; i < 6; i++) {
