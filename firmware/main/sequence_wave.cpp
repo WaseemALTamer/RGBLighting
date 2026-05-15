@@ -32,7 +32,7 @@ namespace SequenceWave{
     float b;
     
     float wave_width = 8.0f;
-
+    float transition_speed = 3;
 
     EaseInOut animation;
 
@@ -76,7 +76,7 @@ namespace SequenceWave{
         animation.update(); // simply update the animation
 
         if (!animation.uniform.is_running){
-            animation.duration = Config::transition_speed;
+            animation.duration = transition_speed;
             if (animation.uniform.current_value <= 0){
                 animation.start_transition();
             }
@@ -110,12 +110,12 @@ namespace SequenceWave{
         // set up the animation
         animation.starting_value = 0;
         animation.ending_value = 1;
-        animation.duration = Config::transition_speed;
+        animation.duration = transition_speed;
         animation.add_callback(on_callback);
         
         // we kick start the animation by transitioning all of the leds 0, 0, 0
         for (int i = 0; i < LEDS_NUMBER; i++) {
-            LightingManager::leds[i].transition(0, 0, 0, Config::transition_speed); // set damping for the pixle so it is ease_in_out
+            LightingManager::leds[i].transition(0, 0, 0, transition_speed); // set damping for the pixle so it is ease_in_out
         }
 
 

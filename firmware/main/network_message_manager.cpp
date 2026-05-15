@@ -71,14 +71,15 @@ namespace MessageManager{
 
                 // this is where the message ends we excuate the command now
                 
-                Config::brightness =  brightness/ 255.0f; // normlise it because we get it as bytes from 
-                                                          // the message command message
+                float brightness_normlised =  brightness/ 255.0f; // normlise it because we get it as bytes from 
+                                                                  // the message command message
 
-                
-                Config::transition_speed = transition_speed;
+                                        
+                Config::transition_speed = transition_speed; // update the transition speed
 
-                LightingManager::pack_all_leds(); // update the led values on the go and 
-                                                  // schedule the update on the leds                                                  
+
+                LightingManager::set_brightness(brightness_normlised);
+                                           
                 
             }
 

@@ -39,6 +39,8 @@ namespace SequenceBreathing{
 
 
     bool is_moving_forword = false;
+    float transition_speed = 2; 
+
     void step_1(void* ctx){
 
 
@@ -46,9 +48,9 @@ namespace SequenceBreathing{
         if (!LightingManager::leds[0].animation.uniform.is_running){
             for (int i = 0; i < LEDS_NUMBER; i++) {
                 if (is_moving_forword){
-                    LightingManager::leds[i].transition(ending_r, ending_g, ending_b, Config::transition_speed);
+                    LightingManager::leds[i].transition(ending_r, ending_g, ending_b, transition_speed);
                 }else{
-                    LightingManager::leds[i].transition(starting_r, starting_g, starting_b, Config::transition_speed);
+                    LightingManager::leds[i].transition(starting_r, starting_g, starting_b, transition_speed);
                 }
             }
 
@@ -60,6 +62,7 @@ namespace SequenceBreathing{
 
     void init(){
         SequenceManager::flush_steps(); // flush the steps before adding the new ones
+
 
 
         // change the damping of the leds
@@ -85,7 +88,7 @@ namespace SequenceBreathing{
 
         // we kick start the animation by transitioning all of the leds to the starting rgb
         for (int i = 0; i < LEDS_NUMBER; i++) {
-            LightingManager::leds[i].transition(starting_r, starting_g, starting_b, Config::transition_speed); // set damping for the pixle so it is ease_in_out
+            LightingManager::leds[i].transition(starting_r, starting_g, starting_b, transition_speed); // set damping for the pixle so it is ease_in_out
         }
     }
 }

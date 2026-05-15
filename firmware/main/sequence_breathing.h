@@ -17,6 +17,9 @@ namespace SequenceBreathing
     extern float ending_g;
     extern float ending_b;
 
+
+    extern float transition_speed;
+
     
     void init();
 }

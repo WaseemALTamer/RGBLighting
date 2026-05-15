@@ -4,7 +4,7 @@
 
 
 
-
+#include "tick_system/transition_ease_in_out.h"
 #include <FastLED.h>
 #include "config.h"
 #include "led_controller.h"
@@ -75,6 +75,31 @@ namespace LightingManager{
     }
 
 
+    EaseInOut brightness_animation;
+
+
+    void set_brightness(float value){
+        
+        if (value < 0) value = 0;
+        if (value > 1) value = 1;
+
+        brightness_animation.stop_transition();
+        brightness_animation.reset_transition();
+
+        brightness_animation.starting_value = Config::brightness;
+        brightness_animation.ending_value = value;
+        brightness_animation.duration = Config::transition_speed;
+
+        brightness_animation.start_transition();
+        
+    }
+
+    void on_brightness_animation_callback(float value, void* ctx){
+        Config::brightness = value;
+        pack_all_leds();
+    }
+
+
     void update(){
         // this function is responsible on writing on
         // the leds in real life
@@ -84,12 +109,18 @@ namespace LightingManager{
 
     }
 
+
+
     
 
     void init(){
         // add the leds to be publics
         FastLED.addLeds<WS2812, LED_DATA_PIN, GRB>(fast_leds, LEDS_NUMBER);
-        FastLED.setBrightness(255);
+        FastLED.setBrightness(255); // i control the brightness with my code not through the library
+
+        brightness_animation.add_callback(on_brightness_animation_callback);
+
+
 
         // add the trigger function
 
@@ -110,6 +141,8 @@ namespace LightingManager{
 
 
     void loop(){
+
+        brightness_animation.update();
 
         for (int i = 0; i < LEDS_NUMBER; i++) {
             LEDController::LED& led = leds[i];

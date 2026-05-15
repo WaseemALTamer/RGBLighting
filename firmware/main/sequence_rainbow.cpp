@@ -29,6 +29,8 @@ namespace SequenceRainbow{
 
     int color_section_length = 5; // determain the devision for each color 
     int offset = 0; // controls movement
+    float transition_speed = 0.3;
+
     
     void step_1(void* ctx){
         int section_size = color_section_length;
@@ -57,7 +59,7 @@ namespace SequenceRainbow{
                 }
             
             
-            LightingManager::leds[i].transition(r, g, b, Config::transition_speed * color_section_length);
+            LightingManager::leds[i].transition(r, g, b, transition_speed * color_section_length);
         }
 
 
@@ -80,6 +82,6 @@ namespace SequenceRainbow{
 
 
         SequenceManager::sequence_steps[0].func = step_1;
-        SequenceManager::sequence_steps[0].cooldown = Config::transition_speed;
+        SequenceManager::sequence_steps[0].cooldown = transition_speed;
     }
 }

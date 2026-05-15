@@ -16,6 +16,8 @@ namespace LightingManager {
 
     void pack_all_leds();
 
+    void set_brightness(float value);
+
     void init();
     void loop();
 

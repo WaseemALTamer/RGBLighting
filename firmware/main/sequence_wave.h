@@ -13,6 +13,8 @@ namespace SequenceWave
     extern float b;
 
     extern float wave_width;
+
+    extern float transition_speed;
     
     void init();
 }
