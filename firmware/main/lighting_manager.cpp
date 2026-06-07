@@ -90,6 +90,12 @@ namespace LightingManager{
         brightness_animation.ending_value = value;
         brightness_animation.duration = Config::transition_speed;
 
+        if (Config::transition_speed == 0){
+            Config::brightness = value;
+            pack_all_leds();
+            return;
+        }
+
         brightness_animation.start_transition();
         
     }

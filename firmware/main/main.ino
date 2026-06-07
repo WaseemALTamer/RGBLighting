@@ -8,6 +8,8 @@
 #include "sequence_rainbow.h"
 
 #include "network_wifi.h"
+#include "network_http_server.h"
+
 
 // this is the entery point of the project there is no logic
 // that runs in this file
@@ -29,6 +31,7 @@ void setup() {
 
     NetworkWifi::init(); // initating the wifi is taking causing an interrupt which
                          // disturb the boot lighting sequence.
+    HttpServer::init();
 
     LightingManager::init();
     SequenceManager::init();
@@ -41,6 +44,7 @@ void loop() {
 
     SequenceManager::loop();
     NetworkWifi::loop();
+    HttpServer::loop();
 
 
     LightingManager::loop();
