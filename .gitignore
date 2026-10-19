@@ -1,0 +1,10 @@
+/__pycache__
+
+/.vscode
+
+/firmware/build
+
+/.venv
+
+a.exe
+
