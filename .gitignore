@@ -2,7 +2,8 @@
 
 /.vscode
 
-/firmware/build
+/firmware/build/
+firmware/libraries/
 
 /.venv
 

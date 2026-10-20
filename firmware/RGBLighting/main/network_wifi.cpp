@@ -1,18 +1,31 @@
 #include <WiFiUdp.h>
 #include <WiFi.h>
 
+#include <esp_crc.h>
+
 #include <Arduino.h>
 #include "config.h"
-#include "network_message_manager.h"
+
+
+#include "protocol_event_dispatcher.h"
+
 
 
 namespace NetworkWifi{
 
     
     WiFiUDP udp;
+    bool udp_started = false;
 
     bool is_connected = false;
+    bool hotspot_active = false;
     int loop_cooldown_duration_ms = 3000;
+
+
+    unsigned long last_reconnect_attempt = 0;
+
+    uint8_t mac_address[6];
+
 
 
     bool loop_cooldown_passed() {
@@ -30,6 +43,38 @@ namespace NetworkWifi{
         return true; // accept event
     }
 
+    void start_hotspot() {
+        if (hotspot_active) return;
+
+
+        WiFi.mode(WIFI_AP);
+        WiFi.setSleep(false);
+
+        bool success = WiFi.softAP(
+            Config::hotspot_ssid,
+            Config::hotspot_password,
+            6,
+            false,
+            4
+        );
+
+        if (success) {
+            hotspot_active = true;
+        } else {
+            Serial.println("Failed to start hotspot");
+        }
+    }
+
+    void stop_hotspot() {
+        if (!hotspot_active) return;
+
+        Serial.println("Stopping fallback hotspot...");
+
+        WiFi.softAPdisconnect(true);
+        hotspot_active = false;
+    }
+
+
 
     void send(IPAddress targetIP, uint16_t targetPort, const uint8_t* payload, size_t length) {
         if (!is_connected) return;
@@ -39,7 +84,19 @@ namespace NetworkWifi{
         udp.endPacket();
     }
 
+
+
     void init(){
+        
+        
+        
+        WiFi.mode(WIFI_STA);
+        WiFi.STA.begin(); // for some reason i need to began the STA wifi to be able to get the mac address
+
+        WiFi.macAddress(mac_address);
+
+
+        WiFi.setAutoReconnect(true);        
         WiFi.begin(Config::network_ssid, Config::network_password);
     }
 
@@ -49,37 +106,78 @@ namespace NetworkWifi{
         wl_status_t status = WiFi.status();
 
         if (status == WL_CONNECTED) {
+
+            if (WiFi.SSID() != Config::network_ssid) { // check if the wifi we are connected to is the correct wifi
+                is_connected = false;
+                WiFi.disconnect();
+                return;
+            }
+
+
             if (!is_connected){
-                udp.begin(Config::network_port);
                 Serial.println(WiFi.localIP());
                 is_connected = true;
+                stop_hotspot();
             }
+
+            //if (is_connected) {
+                //stop_hotspot();
+            //}
+
         }else{
             is_connected = false;
-
-            bool safe_to_reconnect =
-                (status == WL_IDLE_STATUS ||
-                status == WL_NO_SSID_AVAIL ||
-                status == WL_DISCONNECTED ||
-                status == WL_CONNECT_FAILED);
-
-            if (safe_to_reconnect  && loop_cooldown_passed()){
+            start_hotspot();
+            if (loop_cooldown_passed()){
                 WiFi.begin(Config::network_ssid, Config::network_password);
             }
-            return;
+        }
+
+        if (!udp_started) {
+            if (udp.begin(Config::network_port)) {
+                udp_started = true;
+            }
         }
 
 
-        // now we can handel reading messages
         int packetSize = udp.parsePacket();
+
         if (packetSize > 0) {
             IPAddress senderIP = udp.remoteIP();
-            int senderPort = udp.remotePort();
+            uint16_t senderPort = udp.remotePort();
 
             uint8_t buffer[2048];
-            int len = udp.read(buffer, 2048); // limit it to 2048
+            int len = udp.read(buffer, sizeof(buffer));
 
-            MessageManager::decode_message(buffer, len, senderIP, senderPort);
+            if (len < 4) {
+                Serial.println("Packet too short for CRC");
+                return;
+            }
+
+            uint32_t receivedCRC =
+                (uint32_t)buffer[0] |
+                ((uint32_t)buffer[1] << 8) |
+                ((uint32_t)buffer[2] << 16) |
+                ((uint32_t)buffer[3] << 24);
+
+            uint32_t calculatedCRC = esp_crc32_le(
+                0,
+                buffer + 4,
+                (uint32_t)(len - 4)
+            );
+
+            
+            if (receivedCRC != calculatedCRC) {
+                Serial.println("CRC mismatch — packet rejected");
+                return;
+            }
+
+
+            ProtocalEventDispatcher::handle_message(
+                buffer + 4,
+                len - 4,
+                senderIP,
+                senderPort
+            );
         }
 
     }

@@ -74,7 +74,7 @@ const uint8_t *command_decode(Command *msg, const uint8_t *buffer, size_t *buffe
     memcpy(&msg->sequence_number, &buffer[offset], 8);
     offset += 8;
 
-    if (buffer[offset] > 9)
+    if (buffer[offset] > 13)
         return NULL;
     msg->content_type = (ContentType)buffer[offset++];
 
@@ -115,6 +115,16 @@ uint8_t *information_encode(const Information *msg, uint8_t *buffer, size_t *buf
 
     size_t offset = 0;
 
+    memcpy(&buffer[offset], &msg->firmware_version, 4);
+    offset += 4;
+
+    buffer[offset++] = msg->device_type;
+
+    memcpy(&buffer[offset], &msg->led_count, 2);
+    offset += 2;
+
+    buffer[offset++] = msg->status;
+
     *buffer_size -= offset;
     return buffer + offset;
 }
@@ -127,6 +137,16 @@ const uint8_t *information_decode(Information *msg, const uint8_t *buffer, size_
         return NULL;
 
     size_t offset = 0;
+
+    memcpy(&msg->firmware_version, &buffer[offset], 4);
+    offset += 4;
+
+    msg->device_type = buffer[offset++];
+
+    memcpy(&msg->led_count, &buffer[offset], 2);
+    offset += 2;
+
+    msg->status = buffer[offset++];
 
     *buffer_size -= offset;
     return buffer + offset;
@@ -182,11 +202,77 @@ const uint8_t *message_decode(Message *msg, const uint8_t *buffer, size_t *buffe
 
     msg->is_encrypted = buffer[offset++];
 
-    if (buffer[offset] > 9)
+    if (buffer[offset] > 13)
         return NULL;
     msg->content_type = (ContentType)buffer[offset++];
 
     msg->content = buffer + offset;
+
+    *buffer_size -= offset;
+    return buffer + offset;
+}
+
+uint8_t *r_g_b_stream_encode(const RGBStream *msg, uint8_t *buffer, size_t *buffer_size)
+{
+    if (*buffer_size < 10)
+        return NULL;
+
+    size_t offset = 0;
+
+    memcpy(&buffer[offset], &msg->starting_led, 2);
+    offset += 2;
+
+    memcpy(&buffer[offset], &msg->transition_duration, 4);
+    offset += 4;
+
+    *buffer_size -= offset;
+    return buffer + offset;
+}
+
+const uint8_t *r_g_b_stream_decode(RGBStream *msg, const uint8_t *buffer, size_t *buffer_size)
+{
+    if (msg == NULL || buffer == NULL || buffer_size == NULL)
+        return NULL;
+    if (*buffer_size < 10)
+        return NULL;
+
+    size_t offset = 0;
+
+    memcpy(&msg->starting_led, &buffer[offset], 2);
+    offset += 2;
+
+    memcpy(&msg->transition_duration, &buffer[offset], 4);
+    offset += 4;
+
+    msg->content = buffer + offset;
+
+    *buffer_size -= offset;
+    return buffer + offset;
+}
+
+uint8_t *set_brightness_encode(const SetBrightness *msg, uint8_t *buffer, size_t *buffer_size)
+{
+    if (*buffer_size < 1)
+        return NULL;
+
+    size_t offset = 0;
+
+    buffer[offset++] = msg->value;
+
+    *buffer_size -= offset;
+    return buffer + offset;
+}
+
+const uint8_t *set_brightness_decode(SetBrightness *msg, const uint8_t *buffer, size_t *buffer_size)
+{
+    if (msg == NULL || buffer == NULL || buffer_size == NULL)
+        return NULL;
+    if (*buffer_size < 1)
+        return NULL;
+
+    size_t offset = 0;
+
+    msg->value = buffer[offset++];
 
     *buffer_size -= offset;
     return buffer + offset;
@@ -299,6 +385,100 @@ const uint8_t *set_device_status_decode(SetDeviceStatus *msg, const uint8_t *buf
     if (buffer[offset] > 4)
         return NULL;
     msg->status = (DeviceStatus)buffer[offset++];
+
+    *buffer_size -= offset;
+    return buffer + offset;
+}
+
+uint8_t *set_sequence_encode(const SetSequence *msg, uint8_t *buffer, size_t *buffer_size)
+{
+    if (*buffer_size < 21)
+        return NULL;
+
+    size_t offset = 0;
+
+    buffer[offset++] = (uint8_t)msg->sequence;
+
+    memcpy(&buffer[offset], &msg->speed, 4);
+    offset += 4;
+
+    buffer[offset++] = msg->direction;
+
+    memcpy(&buffer[offset], msg->color_one, 3);
+    offset += 3;
+
+    memcpy(&buffer[offset], msg->color_two, 3);
+    offset += 3;
+
+    memcpy(&buffer[offset], msg->color_three, 3);
+    offset += 3;
+
+    memcpy(&buffer[offset], msg->color_four, 3);
+    offset += 3;
+
+    memcpy(&buffer[offset], msg->color_five, 3);
+    offset += 3;
+
+    *buffer_size -= offset;
+    return buffer + offset;
+}
+
+const uint8_t *set_sequence_decode(SetSequence *msg, const uint8_t *buffer, size_t *buffer_size)
+{
+    if (msg == NULL || buffer == NULL || buffer_size == NULL)
+        return NULL;
+    if (*buffer_size < 21)
+        return NULL;
+
+    size_t offset = 0;
+
+    if (buffer[offset] > 3)
+        return NULL;
+    msg->sequence = (SequenceType)buffer[offset++];
+
+    memcpy(&msg->speed, &buffer[offset], 4);
+    offset += 4;
+
+    msg->direction = buffer[offset++];
+
+    memcpy(msg->color_one, &buffer[offset], 3);
+    offset += 3;
+
+    memcpy(msg->color_two, &buffer[offset], 3);
+    offset += 3;
+
+    memcpy(msg->color_three, &buffer[offset], 3);
+    offset += 3;
+
+    memcpy(msg->color_four, &buffer[offset], 3);
+    offset += 3;
+
+    memcpy(msg->color_five, &buffer[offset], 3);
+    offset += 3;
+
+    *buffer_size -= offset;
+    return buffer + offset;
+}
+
+uint8_t *set_setting_encode(const SetSetting *msg, uint8_t *buffer, size_t *buffer_size)
+{
+    if (*buffer_size < 0)
+        return NULL;
+
+    size_t offset = 0;
+
+    *buffer_size -= offset;
+    return buffer + offset;
+}
+
+const uint8_t *set_setting_decode(SetSetting *msg, const uint8_t *buffer, size_t *buffer_size)
+{
+    if (msg == NULL || buffer == NULL || buffer_size == NULL)
+        return NULL;
+    if (*buffer_size < 0)
+        return NULL;
+
+    size_t offset = 0;
 
     *buffer_size -= offset;
     return buffer + offset;

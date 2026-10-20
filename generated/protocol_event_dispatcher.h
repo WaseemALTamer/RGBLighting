@@ -12,7 +12,7 @@
 
 #define MAX_NETWORK_CALLBACKS 5
 
-namespace ProtocalEventHandler
+namespace ProtocalEventDispatcher
 {
 
 
@@ -41,6 +41,16 @@ namespace ProtocalEventHandler
     extern int message_callback_count;
     bool register_message_callback(MessageCallback callback);
 
+    typedef void (*RGBStreamCallback)(RGBStream content, IPAddress senderIP, uint16_t senderPort);
+    extern RGBStreamCallback r_g_b_stream_callbacks[MAX_NETWORK_CALLBACKS];
+    extern int r_g_b_stream_callback_count;
+    bool register_r_g_b_stream_callback(RGBStreamCallback callback);
+
+    typedef void (*SetBrightnessCallback)(SetBrightness content, IPAddress senderIP, uint16_t senderPort);
+    extern SetBrightnessCallback set_brightness_callbacks[MAX_NETWORK_CALLBACKS];
+    extern int set_brightness_callback_count;
+    bool register_set_brightness_callback(SetBrightnessCallback callback);
+
     typedef void (*SetDateTimeCallback)(SetDateTime content, IPAddress senderIP, uint16_t senderPort);
     extern SetDateTimeCallback set_date_time_callbacks[MAX_NETWORK_CALLBACKS];
     extern int set_date_time_callback_count;
@@ -55,6 +65,16 @@ namespace ProtocalEventHandler
     extern SetDeviceStatusCallback set_device_status_callbacks[MAX_NETWORK_CALLBACKS];
     extern int set_device_status_callback_count;
     bool register_set_device_status_callback(SetDeviceStatusCallback callback);
+
+    typedef void (*SetSequenceCallback)(SetSequence content, IPAddress senderIP, uint16_t senderPort);
+    extern SetSequenceCallback set_sequence_callbacks[MAX_NETWORK_CALLBACKS];
+    extern int set_sequence_callback_count;
+    bool register_set_sequence_callback(SetSequenceCallback callback);
+
+    typedef void (*SetSettingCallback)(SetSetting content, IPAddress senderIP, uint16_t senderPort);
+    extern SetSettingCallback set_setting_callbacks[MAX_NETWORK_CALLBACKS];
+    extern int set_setting_callback_count;
+    bool register_set_setting_callback(SetSettingCallback callback);
 
     typedef void (*WifiConnectCallback)(WifiConnect content, IPAddress senderIP, uint16_t senderPort);
     extern WifiConnectCallback wifi_connect_callbacks[MAX_NETWORK_CALLBACKS];

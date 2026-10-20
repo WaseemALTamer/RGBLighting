@@ -30,6 +30,9 @@ namespace Config{
     extern char network_ssid[32];
     extern char network_password[64];
 
+    extern char hotspot_ssid[32];
+    extern char hotspot_password[64];
+
     extern int network_port;
 
 

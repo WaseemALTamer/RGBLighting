@@ -7,12 +7,12 @@
 
 #include <Arduino.h>
 #include "protocol.h"
-#include "protocol_event_handler.h"
+#include "protocol_event_dispatcher.h"
 
 
 
 
-namespace ProtocalEventHandler
+namespace ProtocalEventDispatcher
 {
     // this namespace will proccess each message at a time 
     // this namespace will not  work if  you are running a
@@ -128,6 +128,44 @@ namespace ProtocalEventHandler
             message_callbacks[i](content, senderIP, senderPort);
     }
 
+    RGBStream r_g_b_stream{};
+    RGBStreamCallback r_g_b_stream_callbacks[MAX_NETWORK_CALLBACKS] = {};
+    int r_g_b_stream_callback_count = 0;
+
+    // registration function
+    bool register_r_g_b_stream_callback(RGBStreamCallback callback) {
+        if (callback == nullptr ||
+            r_g_b_stream_callback_count >= MAX_NETWORK_CALLBACKS) return false;
+
+        r_g_b_stream_callbacks[r_g_b_stream_callback_count++] = callback;
+        return true;
+    }
+
+    // trigger function
+    void trigger_r_g_b_stream_callbacks(RGBStream content, IPAddress senderIP, uint16_t senderPort) {
+        for (int i = 0; i < r_g_b_stream_callback_count; i++)
+            r_g_b_stream_callbacks[i](content, senderIP, senderPort);
+    }
+
+    SetBrightness set_brightness{};
+    SetBrightnessCallback set_brightness_callbacks[MAX_NETWORK_CALLBACKS] = {};
+    int set_brightness_callback_count = 0;
+
+    // registration function
+    bool register_set_brightness_callback(SetBrightnessCallback callback) {
+        if (callback == nullptr ||
+            set_brightness_callback_count >= MAX_NETWORK_CALLBACKS) return false;
+
+        set_brightness_callbacks[set_brightness_callback_count++] = callback;
+        return true;
+    }
+
+    // trigger function
+    void trigger_set_brightness_callbacks(SetBrightness content, IPAddress senderIP, uint16_t senderPort) {
+        for (int i = 0; i < set_brightness_callback_count; i++)
+            set_brightness_callbacks[i](content, senderIP, senderPort);
+    }
+
     SetDateTime set_date_time{};
     SetDateTimeCallback set_date_time_callbacks[MAX_NETWORK_CALLBACKS] = {};
     int set_date_time_callback_count = 0;
@@ -185,6 +223,44 @@ namespace ProtocalEventHandler
             set_device_status_callbacks[i](content, senderIP, senderPort);
     }
 
+    SetSequence set_sequence{};
+    SetSequenceCallback set_sequence_callbacks[MAX_NETWORK_CALLBACKS] = {};
+    int set_sequence_callback_count = 0;
+
+    // registration function
+    bool register_set_sequence_callback(SetSequenceCallback callback) {
+        if (callback == nullptr ||
+            set_sequence_callback_count >= MAX_NETWORK_CALLBACKS) return false;
+
+        set_sequence_callbacks[set_sequence_callback_count++] = callback;
+        return true;
+    }
+
+    // trigger function
+    void trigger_set_sequence_callbacks(SetSequence content, IPAddress senderIP, uint16_t senderPort) {
+        for (int i = 0; i < set_sequence_callback_count; i++)
+            set_sequence_callbacks[i](content, senderIP, senderPort);
+    }
+
+    SetSetting set_setting{};
+    SetSettingCallback set_setting_callbacks[MAX_NETWORK_CALLBACKS] = {};
+    int set_setting_callback_count = 0;
+
+    // registration function
+    bool register_set_setting_callback(SetSettingCallback callback) {
+        if (callback == nullptr ||
+            set_setting_callback_count >= MAX_NETWORK_CALLBACKS) return false;
+
+        set_setting_callbacks[set_setting_callback_count++] = callback;
+        return true;
+    }
+
+    // trigger function
+    void trigger_set_setting_callbacks(SetSetting content, IPAddress senderIP, uint16_t senderPort) {
+        for (int i = 0; i < set_setting_callback_count; i++)
+            set_setting_callbacks[i](content, senderIP, senderPort);
+    }
+
     WifiConnect wifi_connect{};
     WifiConnectCallback wifi_connect_callbacks[MAX_NETWORK_CALLBACKS] = {};
     int wifi_connect_callback_count = 0;
@@ -231,6 +307,18 @@ namespace ProtocalEventHandler
 
         switch (type) {
  
+            case CONTENT_TYPE_BYTES_STREAM: {
+                payload = bytes_stream_decode(&bytes_stream, buffer, &remaining);
+
+                if (payload == nullptr) {
+                    return false;
+                }
+
+                trigger_bytes_stream_callbacks(bytes_stream, senderIP, senderPort);
+
+                return true;
+            }
+
             case CONTENT_TYPE_MESSAGE: {
                 payload = message_decode(&message, buffer, &remaining);
 
@@ -247,18 +335,6 @@ namespace ProtocalEventHandler
                 return true;
             }
 
-            case CONTENT_TYPE_BYTES_STREAM: {
-                payload = bytes_stream_decode(&bytes_stream, buffer, &remaining);
-
-                if (payload == nullptr) {
-                    return false;
-                }
-
-                trigger_bytes_stream_callbacks(bytes_stream, senderIP, senderPort);
-
-                return true;
-            }
-
             case CONTENT_TYPE_COMMAND: {
                 payload = command_decode(&command, buffer, &remaining);
 
@@ -271,6 +347,30 @@ namespace ProtocalEventHandler
                 *next_type = command.content_type;
                 *next_buffer = payload;
                 *next_len = remaining;
+
+                return true;
+            }
+
+            case CONTENT_TYPE_INFORMATION: {
+                payload = information_decode(&information, buffer, &remaining);
+
+                if (payload == nullptr) {
+                    return false;
+                }
+
+                trigger_information_callbacks(information, senderIP, senderPort);
+
+                return true;
+            }
+
+            case CONTENT_TYPE_DISCOVERY: {
+                payload = discovery_decode(&discovery, buffer, &remaining);
+
+                if (payload == nullptr) {
+                    return false;
+                }
+
+                trigger_discovery_callbacks(discovery, senderIP, senderPort);
 
                 return true;
             }
@@ -299,18 +399,6 @@ namespace ProtocalEventHandler
                 return true;
             }
 
-            case CONTENT_TYPE_INFORMATION: {
-                payload = information_decode(&information, buffer, &remaining);
-
-                if (payload == nullptr) {
-                    return false;
-                }
-
-                trigger_information_callbacks(information, senderIP, senderPort);
-
-                return true;
-            }
-
             case CONTENT_TYPE_SET_DEVICE_NAME: {
                 payload = set_device_name_decode(&set_device_name, buffer, &remaining);
 
@@ -323,18 +411,6 @@ namespace ProtocalEventHandler
                 return true;
             }
 
-            case CONTENT_TYPE_DISCOVERY: {
-                payload = discovery_decode(&discovery, buffer, &remaining);
-
-                if (payload == nullptr) {
-                    return false;
-                }
-
-                trigger_discovery_callbacks(discovery, senderIP, senderPort);
-
-                return true;
-            }
-
             case CONTENT_TYPE_SET_DATE_TIME: {
                 payload = set_date_time_decode(&set_date_time, buffer, &remaining);
 
@@ -343,6 +419,54 @@ namespace ProtocalEventHandler
                 }
 
                 trigger_set_date_time_callbacks(set_date_time, senderIP, senderPort);
+
+                return true;
+            }
+
+            case CONTENT_TYPE_SET_SEQUENCE: {
+                payload = set_sequence_decode(&set_sequence, buffer, &remaining);
+
+                if (payload == nullptr) {
+                    return false;
+                }
+
+                trigger_set_sequence_callbacks(set_sequence, senderIP, senderPort);
+
+                return true;
+            }
+
+            case CONTENT_TYPE_SET_SETTING: {
+                payload = set_setting_decode(&set_setting, buffer, &remaining);
+
+                if (payload == nullptr) {
+                    return false;
+                }
+
+                trigger_set_setting_callbacks(set_setting, senderIP, senderPort);
+
+                return true;
+            }
+
+            case CONTENT_TYPE_SET_BRIGHTNESS: {
+                payload = set_brightness_decode(&set_brightness, buffer, &remaining);
+
+                if (payload == nullptr) {
+                    return false;
+                }
+
+                trigger_set_brightness_callbacks(set_brightness, senderIP, senderPort);
+
+                return true;
+            }
+
+            case CONTENT_TYPE_RGB_STREAM: {
+                payload = r_g_b_stream_decode(&r_g_b_stream, buffer, &remaining);
+
+                if (payload == nullptr) {
+                    return false;
+                }
+
+                trigger_r_g_b_stream_callbacks(r_g_b_stream, senderIP, senderPort);
 
                 return true;
             }

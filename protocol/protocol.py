@@ -147,6 +147,19 @@ class ContentType(IntEnum):
     SET_DEVICE_STATUS = 7
     SET_DEVICE_NAME = 8
     SET_DATE_TIME = 9
+    SET_SEQUENCE = 10
+    SET_SETTING = 11
+    SET_BRIGHTNESS = 12
+    RGB_STREAM = 13
+
+
+class DeviceStatus(IntEnum):
+    NONE = 0
+    BOOTING = 1
+    NORMAL = 2
+
+    NETWORK_ERROR = 3
+    UNKNOWN_ERROR = 4
 
 
 
@@ -207,26 +220,20 @@ class Message(MessageBase):
 
 
 
-class DeviceStatus(IntEnum):
-    NONE = 0
-    BOOTING = 1
-    NORMAL = 2
-
-    NETWORK_ERROR = 3
-    UNKNOWN_ERROR = 4
-
-
-    
-
-
-
 @dataclass
 class Information(MessageBase):
 
+    firmware_version: int = 0
+    device_type: int = 0
+    led_count: int = 0
+    status: int = 0
 
     __size__ = 0
     __fields__ = {
-
+        "firmware_version": (int, 4),
+        "device_type": (int, 1),
+        "led_count": (int, 2),
+        "status": (int, 1)
     }
 
 
@@ -312,19 +319,112 @@ class SetDateTime(MessageBase):
         "year": (int, 4)
     }
 
+class SequenceType(IntEnum):
+    NONE = 0
+    RAINBOW = 1
+    BREATHING = 2
+    WAVE = 3
+
+
+
+@dataclass
+class SetSequence(MessageBase):
+
+    sequence: int = SequenceType.NONE
+    speed: float = 1.0
+
+    direction: int = 0
+
+    color_one: int = 0
+    color_two: int = 0
+    color_three: int = 0
+    color_four: int = 0
+    color_five: int = 0
+
+    __size__ = 21
+    __fields__ = {
+        "sequence":   (int, 1),
+        "speed":      (float, 4),
+        "direction":  (int, 1),
+        "color_one":  (int, 3),
+        "color_two":  (int, 3),
+        "color_three": (int, 3),
+        "color_four": (int, 3),
+        "color_five": (int, 3),
+    }
+
+
+@dataclass
+class SetSetting(MessageBase):
+
+    
+    __size__ = 0
+    __fields__ = {
+        
+    }
+
+
+@dataclass
+class SetBrightness(MessageBase):
+    value: int = 0
+    
+    __size__ = 1
+    __fields__ = {
+        "value" : (int, 1)
+    }
+
+
+@dataclass
+class RGBStream(MessageBase):
+    #the stream goes like this 
+
+    # RGBRGBRGB...RGB
+    # you get the point the RGB does for as many
+    # leds as you have
+
+    # each value is a byte 0-255
+    # R - red
+    # G - green
+    # B - blue
+
+    #leds_number:int = 0 # the bytes stream will contain how many leds values there are
+
+    starting_led:int = 0
+    transition_duration:float = 0
+
+    # we dont include the content type
+    content:BytesStream = None # you are expected to build the stream your self
+
+    __size__ = 10
+    __fields__ = {
+        "starting_led" : (int, 2),
+        "transition_duration" : (float, 4),
+    }
+
+
+
+
+
+
+
+
 
 
 
 
 
 MESSAGE_TYPE_REGISTRY = {
-    ContentType.MESSAGE: Message,
     ContentType.BYTES_STREAM: BytesStream,
+    ContentType.MESSAGE: Message,
     ContentType.COMMAND: Command,
+    ContentType.INFORMATION: Information,
+    ContentType.DISCOVERY: Discovery,
     ContentType.WIFI_CONNECT: WifiConnect,
-    ContentType.SET_DEVICE_STATUS : SetDeviceStatus,
-    ContentType.INFORMATION : Information,
-    ContentType.SET_DEVICE_NAME : SetDeviceName,
-    ContentType.DISCOVERY : Discovery,
-    ContentType.SET_DATE_TIME: SetDateTime
+    ContentType.SET_DEVICE_STATUS: SetDeviceStatus,
+    ContentType.SET_DEVICE_NAME: SetDeviceName,
+    ContentType.SET_DATE_TIME: SetDateTime,
+    ContentType.SET_SEQUENCE: SetSequence,
+    ContentType.SET_SETTING: SetSetting,
+    ContentType.SET_BRIGHTNESS: SetBrightness,
+    ContentType.RGB_STREAM: RGBStream,
 }

@@ -21,6 +21,9 @@ namespace Config{
     char network_ssid[32];
     char network_password[64];
 
+    char hotspot_ssid[32];
+    char hotspot_password[64];
+
     int network_port = 39394;
 
 
@@ -38,6 +41,15 @@ namespace Config{
         network_ssid[sizeof(network_ssid) - 1] = '\0';
         network_password[sizeof(network_password) - 1] = '\0';
 
+
+
+        // add the newtork data they are not changable for now at least
+        strncpy(hotspot_ssid, name, sizeof(hotspot_ssid));
+        strncpy(hotspot_password, "", sizeof(hotspot_password));
+
+        // adding the null treminator just in case 
+        hotspot_ssid[sizeof(hotspot_ssid) - 1] = '\0';
+        hotspot_password[sizeof(hotspot_password) - 1] = '\0';
 
         // this will handel loading on the data that you
         // have stored later on

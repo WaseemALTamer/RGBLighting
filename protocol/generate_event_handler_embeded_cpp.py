@@ -164,7 +164,7 @@ generated_h = """
 
 #define MAX_NETWORK_CALLBACKS 5
 
-namespace ProtocalEventHandler
+namespace ProtocalEventDispatcher
 {
 
 
@@ -194,12 +194,12 @@ generated_c = """
 
 #include <Arduino.h>
 #include "protocol.h"
-#include "protocol_event_handler.h"
+#include "protocol_event_dispatcher.h"
 
 
 
 
-namespace ProtocalEventHandler
+namespace ProtocalEventDispatcher
 {
     // this namespace will proccess each message at a time 
     // this namespace will not  work if  you are running a
@@ -332,8 +332,8 @@ if __name__ == "__main__":
     folder = "generated"
     os.makedirs(folder, exist_ok=True)
 
-    header_file_path = os.path.join(folder, "protocol_event_handler.h")
-    implementation_file_path = os.path.join(folder, "protocol_event_handler.cpp")
+    header_file_path = os.path.join(folder, "protocol_event_dispatcher.h")
+    implementation_file_path = os.path.join(folder, "protocol_event_dispatcher.cpp")
 
 
     with open(header_file_path, "w") as f:

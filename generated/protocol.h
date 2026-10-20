@@ -21,6 +21,10 @@ typedef enum ContentType {
     CONTENT_TYPE_SET_DEVICE_STATUS = 7,
     CONTENT_TYPE_SET_DEVICE_NAME = 8,
     CONTENT_TYPE_SET_DATE_TIME = 9,
+    CONTENT_TYPE_SET_SEQUENCE = 10,
+    CONTENT_TYPE_SET_SETTING = 11,
+    CONTENT_TYPE_SET_BRIGHTNESS = 12,
+    CONTENT_TYPE_RGB_STREAM = 13,
 } ContentType;
 
 
@@ -31,6 +35,14 @@ typedef enum DeviceStatus {
     DEVICE_STATUS_NETWORK_ERROR = 3,
     DEVICE_STATUS_UNKNOWN_ERROR = 4,
 } DeviceStatus;
+
+
+typedef enum SequenceType {
+    SEQUENCE_TYPE_NONE = 0,
+    SEQUENCE_TYPE_RAINBOW = 1,
+    SEQUENCE_TYPE_BREATHING = 2,
+    SEQUENCE_TYPE_WAVE = 3,
+} SequenceType;
 
 
 typedef struct{
@@ -48,6 +60,10 @@ typedef struct{
 } Discovery;
 
 typedef struct{
+    uint32_t firmware_version;
+    uint8_t device_type;
+    uint16_t led_count;
+    uint8_t status;
 } Information;
 
 typedef struct{
@@ -59,6 +75,16 @@ typedef struct{
     ContentType content_type;
     const uint8_t *content;
 } Message;
+
+typedef struct{
+    uint16_t starting_led;
+    float transition_duration;
+    const uint8_t *content;
+} RGBStream;
+
+typedef struct{
+    uint8_t value;
+} SetBrightness;
 
 typedef struct{
     uint8_t seconds;
@@ -76,6 +102,20 @@ typedef struct{
 typedef struct{
     DeviceStatus status;
 } SetDeviceStatus;
+
+typedef struct{
+    SequenceType sequence;
+    float speed;
+    uint8_t direction;
+    uint8_t color_one[3];
+    uint8_t color_two[3];
+    uint8_t color_three[3];
+    uint8_t color_four[3];
+    uint8_t color_five[3];
+} SetSequence;
+
+typedef struct{
+} SetSetting;
 
 typedef struct{
     char ssid[32];
@@ -147,6 +187,30 @@ const uint8_t *message_decode(
     size_t *buffer_size
 );
 
+uint8_t *r_g_b_stream_encode(
+    const RGBStream *msg,
+    uint8_t *buffer,
+    size_t *buffer_size
+);
+
+const uint8_t *r_g_b_stream_decode(
+    RGBStream *msg,
+    const uint8_t *buffer,
+    size_t *buffer_size
+);
+
+uint8_t *set_brightness_encode(
+    const SetBrightness *msg,
+    uint8_t *buffer,
+    size_t *buffer_size
+);
+
+const uint8_t *set_brightness_decode(
+    SetBrightness *msg,
+    const uint8_t *buffer,
+    size_t *buffer_size
+);
+
 uint8_t *set_date_time_encode(
     const SetDateTime *msg,
     uint8_t *buffer,
@@ -179,6 +243,30 @@ uint8_t *set_device_status_encode(
 
 const uint8_t *set_device_status_decode(
     SetDeviceStatus *msg,
+    const uint8_t *buffer,
+    size_t *buffer_size
+);
+
+uint8_t *set_sequence_encode(
+    const SetSequence *msg,
+    uint8_t *buffer,
+    size_t *buffer_size
+);
+
+const uint8_t *set_sequence_decode(
+    SetSequence *msg,
+    const uint8_t *buffer,
+    size_t *buffer_size
+);
+
+uint8_t *set_setting_encode(
+    const SetSetting *msg,
+    uint8_t *buffer,
+    size_t *buffer_size
+);
+
+const uint8_t *set_setting_decode(
+    SetSetting *msg,
     const uint8_t *buffer,
     size_t *buffer_size
 );
