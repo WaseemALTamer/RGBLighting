@@ -12,6 +12,12 @@ namespace SequenceWave
     extern float g;
     extern float b;
 
+
+    extern float background_r;
+    extern float background_g;
+    extern float background_b;
+    
+
     extern float wave_width;
 
     extern float transition_speed;

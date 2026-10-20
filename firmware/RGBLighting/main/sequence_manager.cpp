@@ -69,21 +69,26 @@ namespace SequenceManager {
                 break;
 
             case SEQUENCE_TYPE_BREATHING:
-                SequenceBreathing::starting_r = content.color_one[0];
-                SequenceBreathing::starting_g = content.color_one[1];
-                SequenceBreathing::starting_b = content.color_one[2];
+                SequenceBreathing::starting_r = content.color_one[2] / 255.0f;
+                SequenceBreathing::starting_g = content.color_one[1] / 255.0f;
+                SequenceBreathing::starting_b = content.color_one[0] / 255.0f;
 
-                SequenceBreathing::ending_r = content.color_two[0];
-                SequenceBreathing::ending_g = content.color_two[1];
-                SequenceBreathing::ending_b = content.color_two[2];
+                SequenceBreathing::ending_r = content.color_two[2] / 255.0f;
+                SequenceBreathing::ending_g = content.color_two[1] / 255.0f;
+                SequenceBreathing::ending_b = content.color_two[0] / 255.0f;
+
 
                 SequenceBreathing::transition_speed = content.speed;
                 break;
 
             case SEQUENCE_TYPE_WAVE:
-                SequenceWave::r = content.color_one[0];
-                SequenceWave::g = content.color_one[1];
-                SequenceWave::b = content.color_one[2];
+                SequenceWave::r = content.color_one[2] / 255.0f;
+                SequenceWave::g = content.color_one[1] / 255.0f;
+                SequenceWave::b = content.color_one[0] / 255.0f;
+
+                SequenceWave::background_r = content.color_two[2] / 255.0f;
+                SequenceWave::background_g = content.color_two[1] / 255.0f;
+                SequenceWave::background_b = content.color_two[0] / 255.0f;
 
                 SequenceWave::transition_speed = content.speed;
                 SequenceWave::wave_width = content.width;

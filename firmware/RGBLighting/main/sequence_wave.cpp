@@ -30,6 +30,10 @@ namespace SequenceWave{
     float r = 1;
     float g = 0;
     float b = 0.7;
+
+    float background_r = 0;
+    float background_g = 0;
+    float background_b = 0;
     
     float wave_width = 8.0f;
     float transition_speed = 3;
@@ -59,7 +63,7 @@ namespace SequenceWave{
                 );
 
             } else {
-                LightingManager::leds[i].transition(0, 0, 0, 0.05f);
+                LightingManager::leds[i].transition(background_r, background_g, background_b, 0.05f);
             }
         }
 
@@ -99,9 +103,9 @@ namespace SequenceWave{
             LightingManager::leds[i].animation.damping = 2; // set damping for the pixle so it is ease_in_out
         }
 
-        r = LightingManager::leds[0].r;
-        g = LightingManager::leds[0].g;
-        b = LightingManager::leds[0].b;
+        //r = LightingManager::leds[0].r;
+        //g = LightingManager::leds[0].g;
+        //b = LightingManager::leds[0].b;
         
 
         SequenceSystem::sequence_steps[0].func = step_1;
