@@ -408,6 +408,12 @@ uint8_t *set_sequence_encode(const SetSequence *msg, uint8_t *buffer, size_t *bu
     memcpy(&buffer[offset], &msg->speed, 4);
     offset += 4;
 
+    memcpy(&buffer[offset], &msg->width, 4);
+    offset += 4;
+
+    memcpy(&buffer[offset], &msg->height, 4);
+    offset += 4;
+
     buffer[offset++] = msg->direction;
 
     memcpy(&buffer[offset], msg->color_one, 3);
@@ -443,6 +449,12 @@ const uint8_t *set_sequence_decode(SetSequence *msg, const uint8_t *buffer, size
     msg->sequence = (SequenceType)buffer[offset++];
 
     memcpy(&msg->speed, &buffer[offset], 4);
+    offset += 4;
+
+    memcpy(&msg->width, &buffer[offset], 4);
+    offset += 4;
+
+    memcpy(&msg->height, &buffer[offset], 4);
     offset += 4;
 
     msg->direction = buffer[offset++];

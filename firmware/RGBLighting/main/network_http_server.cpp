@@ -7,7 +7,7 @@
 #include "config.h"
 #include "lighting_manager.h"
 #include "led_controller.h"
-#include "sequence_manager.h"
+#include "sequence_system.h"
 
 #include "sequence_rainbow.h"
 #include "sequence_breathing.h"
@@ -52,7 +52,7 @@ namespace HttpServer{
             float b = blue / 255.0f;
 
 
-            SequenceManager::flush_steps();
+            SequenceSystem::flush_steps();
 
             for (uint64_t i = 0; i < LEDS_NUMBER; i++) {
 

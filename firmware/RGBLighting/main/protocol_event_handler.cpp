@@ -6,7 +6,7 @@
 
 #include "config.h"
 #include "lighting_manager.h"
-#include "sequence_manager.h"
+#include "sequence_system.h"
 
 
 
@@ -39,7 +39,7 @@ namespace ProtocalEventHandler
             return;
         }
 
-        SequenceManager::flush_steps(); // flush the sequence manager to remove the effect if anything is playing
+        SequenceSystem::flush_steps(); // flush the sequence manager to remove the effect if anything is playing
                                         // this need to be removed from this part of  the  code later on down the
                                         // line after making something like a status sequence manager
 

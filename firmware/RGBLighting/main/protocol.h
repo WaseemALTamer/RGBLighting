@@ -107,6 +107,8 @@ typedef struct{
 typedef struct{
     SequenceType sequence;
     float speed;
+    float width;
+    float height;
     uint8_t direction;
     uint8_t color_one[3];
     uint8_t color_two[3];

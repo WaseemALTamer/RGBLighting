@@ -25,8 +25,12 @@ class MessageBase:
             if value is None:
                 continue
 
+            if field not in self.__fields__:
+                data += value.to_bytes()
+                continue
+
             
-            if field_type is str:
+            if isinstance(value, str):
                 _bytes = value.encode("utf-8")
                 if len(_bytes) > size:
                     raise ValueError(
@@ -36,9 +40,9 @@ class MessageBase:
 
                 data += _bytes.ljust(size, b"\x00")
                 
-            elif field_type is int:
+            elif isinstance(value, int):
                 data += value.to_bytes(size, byteorder="little")
-            elif field_type is float:
+            elif isinstance(value, float):
                 if size == 8:
                     data += struct.pack("<d", value)
                 elif size == 4:
@@ -328,6 +332,9 @@ class SetSequence(MessageBase):
     sequence: int = SequenceType.NONE
     speed: float = 1.0
 
+    width: float = 0
+    height: float = 0
+
     direction: int = 0
 
     color_one: int = 0
@@ -338,14 +345,16 @@ class SetSequence(MessageBase):
 
     __size__ = 21
     __fields__ = {
-        "sequence":   (int, 1),
-        "speed":      (float, 4),
-        "direction":  (int, 1),
-        "color_one":  (int, 3),
-        "color_two":  (int, 3),
+        "sequence":    (int, 1),
+        "speed":       (float, 4),
+        "width":       (float, 4),
+        "height":      (float, 4),
+        "direction":   (int, 1),
+        "color_one":   (int, 3),
+        "color_two":   (int, 3),
         "color_three": (int, 3),
-        "color_four": (int, 3),
-        "color_five": (int, 3),
+        "color_four":  (int, 3),
+        "color_five":  (int, 3),
     }
 
 

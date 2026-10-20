@@ -1,5 +1,5 @@
 
-#include "sequence_manager.h"
+#include "sequence_system.h"
 #include "lighting_manager.h"
 #include "config.h"
 
@@ -8,7 +8,7 @@
 // this file is responsible for the boot sequence
 // it aims to play a  one  time sequence and this
 // file should be taken  as an  example of how to
-// use the SequenceManager
+// use the SequenceSystem
 
 
 
@@ -71,7 +71,7 @@ namespace SequenceRainbow{
 
 
     void init(){
-        SequenceManager::flush_steps(); // flush the steps before adding the new ones
+        SequenceSystem::flush_steps(); // flush the steps before adding the new ones
 
 
         // change the damping of the leds
@@ -81,7 +81,7 @@ namespace SequenceRainbow{
         
 
 
-        SequenceManager::sequence_steps[0].func = step_1;
-        SequenceManager::sequence_steps[0].cooldown = transition_speed;
+        SequenceSystem::sequence_steps[0].func = step_1;
+        SequenceSystem::sequence_steps[0].cooldown = transition_speed;
     }
 }

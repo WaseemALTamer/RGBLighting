@@ -332,6 +332,9 @@ class SetSequence(MessageBase):
     sequence: int = SequenceType.NONE
     speed: float = 1.0
 
+    width: float = 0
+    height: float = 0
+
     direction: int = 0
 
     color_one: int = 0
@@ -342,14 +345,16 @@ class SetSequence(MessageBase):
 
     __size__ = 21
     __fields__ = {
-        "sequence":   (int, 1),
-        "speed":      (float, 4),
-        "direction":  (int, 1),
-        "color_one":  (int, 3),
-        "color_two":  (int, 3),
+        "sequence":    (int, 1),
+        "speed":       (float, 4),
+        "width":       (float, 4),
+        "height":      (float, 4),
+        "direction":   (int, 1),
+        "color_one":   (int, 3),
+        "color_two":   (int, 3),
         "color_three": (int, 3),
-        "color_four": (int, 3),
-        "color_five": (int, 3),
+        "color_four":  (int, 3),
+        "color_five":  (int, 3),
     }
 
 

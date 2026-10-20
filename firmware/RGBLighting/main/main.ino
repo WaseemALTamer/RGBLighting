@@ -3,7 +3,7 @@
 #include "config.h"
 #include "lighting_manager.h"
 
-#include "sequence_manager.h"
+#include "sequence_system.h"
 #include "sequence_boot.h"
 #include "sequence_rainbow.h"
 
@@ -35,7 +35,7 @@ void setup() {
     HttpServer::init();
 
     LightingManager::init();
-    SequenceManager::init();
+    SequenceSystem::init();
 
 
     SequenceBoot::init(); // add the boot sequence
@@ -45,7 +45,7 @@ void setup() {
 
 void loop() {
 
-    SequenceManager::loop();
+    SequenceSystem::loop();
     NetworkWifi::loop();
     HttpServer::loop();
 

@@ -1,5 +1,5 @@
 
-#include "sequence_manager.h"
+#include "sequence_system.h"
 #include "lighting_manager.h"
 #include "config.h"
 
@@ -8,7 +8,7 @@
 // this file is responsible for the boot sequence
 // it aims to play a  one  time sequence and this
 // file should be taken  as an  example of how to
-// use the SequenceManager
+// use the SequenceSystem
 
 
 
@@ -27,9 +27,9 @@ namespace SequenceWave{
     // then it goes red then it goes black
 
 
-    float r;
-    float g;
-    float b;
+    float r = 1;
+    float g = 0;
+    float b = 0.7;
     
     float wave_width = 8.0f;
     float transition_speed = 3;
@@ -91,7 +91,7 @@ namespace SequenceWave{
 
 
     void init(){
-        SequenceManager::flush_steps(); // flush the steps before adding the new ones
+        SequenceSystem::flush_steps(); // flush the steps before adding the new ones
 
 
         // change the damping of the leds
@@ -104,8 +104,8 @@ namespace SequenceWave{
         b = LightingManager::leds[0].b;
         
 
-        SequenceManager::sequence_steps[0].func = step_1;
-        SequenceManager::sequence_steps[0].cooldown = 0.015; // this will act as our tick to check our led state
+        SequenceSystem::sequence_steps[0].func = step_1;
+        SequenceSystem::sequence_steps[0].cooldown = 0.015; // this will act as our tick to check our led state
 
         // set up the animation
         animation.starting_value = 0;
