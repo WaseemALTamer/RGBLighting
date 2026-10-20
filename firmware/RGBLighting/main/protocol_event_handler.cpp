@@ -6,7 +6,7 @@
 
 #include "config.h"
 #include "lighting_manager.h"
-#include "sequence_system.h"
+#include "sequence_manager.h"
 
 
 
@@ -39,9 +39,7 @@ namespace ProtocalEventHandler
             return;
         }
 
-        SequenceSystem::flush_steps(); // flush the sequence manager to remove the effect if anything is playing
-                                        // this need to be removed from this part of  the  code later on down the
-                                        // line after making something like a status sequence manager
+        SequenceManager::stop_sequence();
 
         if (led_count > LEDS_NUMBER - starting_led) {
             led_count = LEDS_NUMBER - starting_led;
@@ -78,6 +76,7 @@ namespace ProtocalEventHandler
 
     void on_set_sequence(SetSequence content, IPAddress senderIP, uint16_t senderPort){
         //Serial.println("on_set_sequence");
+        SequenceManager::apply_sequence(content);
     }
 
     

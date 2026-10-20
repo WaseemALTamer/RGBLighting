@@ -2,8 +2,8 @@
 #include "sequence_system.h"
 #include "lighting_manager.h"
 #include "config.h"
-#include "sequence_rainbow.h"
-
+#include "sequence_manager.h"
+#include "protocol.h"
 
 
 // this file is responsible for the boot sequence
@@ -92,7 +92,7 @@ namespace SequenceBoot{
 
             // add the rainbow effect 
 
-            SequenceRainbow::init();
+            SequenceManager::start_sequence(SEQUENCE_TYPE_RAINBOW);
             // since step 4 is the final step flush the steps
             //SequenceSystem::flush_steps();
             return;
