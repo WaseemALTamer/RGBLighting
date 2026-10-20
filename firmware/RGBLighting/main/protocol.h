@@ -84,6 +84,7 @@ typedef struct{
 
 typedef struct{
     uint8_t value;
+    float transition_duration;
 } SetBrightness;
 
 typedef struct{

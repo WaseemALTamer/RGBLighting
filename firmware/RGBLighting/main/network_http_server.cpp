@@ -86,7 +86,7 @@ namespace HttpServer{
         if (server.hasArg("brightness")) {
             String brightnessStr = server.arg("brightness");
             float brightness = brightnessStr.toFloat();
-            LightingManager::set_brightness(brightness);
+            LightingManager::set_brightness(brightness, Config::transition_speed);
         }
 
         server.send(200, "text/plain", "1");

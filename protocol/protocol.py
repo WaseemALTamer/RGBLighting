@@ -55,8 +55,7 @@ class MessageBase:
                 pass
 
         if (
-            hasattr(self, "content_type")
-            and hasattr(self, "content")
+            hasattr(self, "content")
         ):
             value = self.content
             if isinstance(value, MessageBase):
@@ -367,10 +366,12 @@ class SetSetting(MessageBase):
 @dataclass
 class SetBrightness(MessageBase):
     value: int = 0
+    transition_duration:float = 0
     
-    __size__ = 1
+    __size__ = 5
     __fields__ = {
-        "value" : (int, 1)
+        "value" : (int, 1),
+        "transition_duration" : (float, 4)
     }
 
 

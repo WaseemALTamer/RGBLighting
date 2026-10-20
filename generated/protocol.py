@@ -25,12 +25,8 @@ class MessageBase:
             if value is None:
                 continue
 
-            if field not in self.__fields__:
-                data += value.to_bytes()
-                continue
-
             
-            if isinstance(value, str):
+            if field_type is str:
                 _bytes = value.encode("utf-8")
                 if len(_bytes) > size:
                     raise ValueError(
@@ -40,9 +36,9 @@ class MessageBase:
 
                 data += _bytes.ljust(size, b"\x00")
                 
-            elif isinstance(value, int):
+            elif field_type is int:
                 data += value.to_bytes(size, byteorder="little")
-            elif isinstance(value, float):
+            elif field_type is float:
                 if size == 8:
                     data += struct.pack("<d", value)
                 elif size == 4:
@@ -55,8 +51,7 @@ class MessageBase:
                 pass
 
         if (
-            hasattr(self, "content_type")
-            and hasattr(self, "content")
+            hasattr(self, "content")
         ):
             value = self.content
             if isinstance(value, MessageBase):
@@ -367,10 +362,12 @@ class SetSetting(MessageBase):
 @dataclass
 class SetBrightness(MessageBase):
     value: int = 0
+    transition_duration:float = 0
     
-    __size__ = 1
+    __size__ = 5
     __fields__ = {
-        "value" : (int, 1)
+        "value" : (int, 1),
+        "transition_duration" : (float, 4)
     }
 
 

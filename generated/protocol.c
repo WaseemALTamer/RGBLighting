@@ -252,12 +252,15 @@ const uint8_t *r_g_b_stream_decode(RGBStream *msg, const uint8_t *buffer, size_t
 
 uint8_t *set_brightness_encode(const SetBrightness *msg, uint8_t *buffer, size_t *buffer_size)
 {
-    if (*buffer_size < 1)
+    if (*buffer_size < 5)
         return NULL;
 
     size_t offset = 0;
 
     buffer[offset++] = msg->value;
+
+    memcpy(&buffer[offset], &msg->transition_duration, 4);
+    offset += 4;
 
     *buffer_size -= offset;
     return buffer + offset;
@@ -267,12 +270,15 @@ const uint8_t *set_brightness_decode(SetBrightness *msg, const uint8_t *buffer, 
 {
     if (msg == NULL || buffer == NULL || buffer_size == NULL)
         return NULL;
-    if (*buffer_size < 1)
+    if (*buffer_size < 5)
         return NULL;
 
     size_t offset = 0;
 
     msg->value = buffer[offset++];
+
+    memcpy(&msg->transition_duration, &buffer[offset], 4);
+    offset += 4;
 
     *buffer_size -= offset;
     return buffer + offset;

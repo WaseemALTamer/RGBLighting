@@ -78,7 +78,7 @@ namespace LightingManager{
     EaseInOut brightness_animation;
 
 
-    void set_brightness(float value){
+    void set_brightness(float value, float transition_duration){
         
         if (value < 0) value = 0;
         if (value > 1) value = 1;
@@ -88,9 +88,9 @@ namespace LightingManager{
 
         brightness_animation.starting_value = Config::brightness;
         brightness_animation.ending_value = value;
-        brightness_animation.duration = Config::transition_speed;
+        brightness_animation.duration = transition_duration;
 
-        if (Config::transition_speed == 0){
+        if (transition_duration == 0){
             Config::brightness = value;
             pack_all_leds();
             return;
