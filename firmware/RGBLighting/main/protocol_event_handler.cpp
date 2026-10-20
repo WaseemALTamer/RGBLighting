@@ -81,8 +81,6 @@ namespace ProtocalEventHandler
                 b,
                 content.transition_duration
             );
-            Serial.println(content.transition_duration);
-
         }
     }
 
