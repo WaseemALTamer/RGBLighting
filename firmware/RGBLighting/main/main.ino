@@ -9,6 +9,7 @@
 
 #include "network_wifi.h"
 #include "network_http_server.h"
+#include "protocol_event_handler.h"
 
 
 // this is the entery point of the project there is no logic
@@ -29,8 +30,8 @@ void setup() {
     // on the config file 
     Config::init();
 
-    NetworkWifi::init(); // initating the wifi is taking causing an interrupt which
-                         // disturb the boot lighting sequence.
+    
+    NetworkWifi::init();
     HttpServer::init();
 
     LightingManager::init();
@@ -38,6 +39,8 @@ void setup() {
 
 
     SequenceBoot::init(); // add the boot sequence
+
+    ProtocalEventHandler::init(); // we register the protocal handlers last
 }
 
 void loop() {

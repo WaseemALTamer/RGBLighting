@@ -214,7 +214,7 @@ const uint8_t *message_decode(Message *msg, const uint8_t *buffer, size_t *buffe
 
 uint8_t *r_g_b_stream_encode(const RGBStream *msg, uint8_t *buffer, size_t *buffer_size)
 {
-    if (*buffer_size < 10)
+    if (*buffer_size < 6)
         return NULL;
 
     size_t offset = 0;
@@ -233,7 +233,7 @@ const uint8_t *r_g_b_stream_decode(RGBStream *msg, const uint8_t *buffer, size_t
 {
     if (msg == NULL || buffer == NULL || buffer_size == NULL)
         return NULL;
-    if (*buffer_size < 10)
+    if (*buffer_size < 6)
         return NULL;
 
     size_t offset = 0;

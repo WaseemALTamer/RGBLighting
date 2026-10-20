@@ -395,7 +395,7 @@ class RGBStream(MessageBase):
     # we dont include the content type
     content:BytesStream = None # you are expected to build the stream your self
 
-    __size__ = 10
+    __size__ = 6
     __fields__ = {
         "starting_led" : (int, 2),
         "transition_duration" : (float, 4),
@@ -414,7 +414,6 @@ class RGBStream(MessageBase):
 
 
 MESSAGE_TYPE_REGISTRY = {
-    ContentType.NONE: None,
     ContentType.BYTES_STREAM: BytesStream,
     ContentType.MESSAGE: Message,
     ContentType.COMMAND: Command,
