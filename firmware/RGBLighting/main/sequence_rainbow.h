@@ -9,6 +9,7 @@ namespace SequenceRainbow
 
 
     extern float wave_cycle_duration;
-    extern int color_section_length; // determain the devision for each color 
+    extern int color_section_length; // determain the devision for each color
+    extern int direction;
     void init();
 }

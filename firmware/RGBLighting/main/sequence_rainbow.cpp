@@ -48,6 +48,8 @@ namespace SequenceRainbow{
     float wave_cycle_duration = 3;
     int color_section_length = 15;
     int offset = 0;
+    int direction = 0; // is forward and 0 is backward
+
 
     TickController tick_controller;
     float current_delta = 0;
@@ -76,7 +78,11 @@ namespace SequenceRainbow{
             LightingManager::leds[led_index_blue].transition(0, 0, 1, wave_cycle_duration / 3);
         }
 
-        offset = (offset + 1) % color_section_length;
+        if (direction == 1) {
+            offset = (offset + 1) % color_section_length;
+        } else {
+            offset = (offset - 1 + color_section_length) % color_section_length;
+        }
     }
 
 

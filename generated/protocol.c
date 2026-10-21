@@ -444,7 +444,7 @@ const uint8_t *set_sequence_decode(SetSequence *msg, const uint8_t *buffer, size
 
     size_t offset = 0;
 
-    if (buffer[offset] > 3)
+    if (buffer[offset] > 16)
         return NULL;
     msg->sequence = (SequenceType)buffer[offset++];
 

@@ -10,6 +10,8 @@
 #include "sequence_rainbow.h"
 #include "sequence_breathing.h"
 #include "sequence_wave.h"
+#include "sequence_color_cycle.h"
+
 
 // this file will be responsible for excuating sequence of
 // instructions, it will do it in  steps each step contain
@@ -55,6 +57,10 @@ namespace SequenceManager {
                 SequenceWave::init();
                 break;
 
+            case SEQUENCE_TYPE_COLOR_CYCLE:
+                SequenceColorCycle::init();
+                break;
+
             default:
                 return;
         }
@@ -68,6 +74,7 @@ namespace SequenceManager {
             case SEQUENCE_TYPE_RAINBOW:
                 SequenceRainbow::wave_cycle_duration = content.speed;
                 SequenceRainbow::color_section_length = content.width;
+                SequenceRainbow::direction = content.direction;
                 break;
 
             case SEQUENCE_TYPE_BREATHING:
@@ -96,6 +103,10 @@ namespace SequenceManager {
                 SequenceWave::wave_width = content.width;
                 break;
 
+            case SEQUENCE_TYPE_COLOR_CYCLE:
+                SequenceColorCycle::transition_duration = content.speed;
+                SequenceColorCycle::direction = content.direction;
+                break;
             default:
                 return;
         }

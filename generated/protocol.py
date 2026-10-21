@@ -316,9 +316,28 @@ class SetDateTime(MessageBase):
 
 class SequenceType(IntEnum):
     NONE = 0
+
     RAINBOW = 1
     BREATHING = 2
     WAVE = 3
+    COLOR_CYCLE = 4
+
+    SLEEP = 5
+    WAKEUP = 6
+
+    COLOR_WIPE = 7
+    CHASE = 8
+    PULSE = 9
+    FIRE = 10
+    TWINKLE = 11
+    SCANNER = 12
+
+    PROGRESS = 13
+    ALERT = 14
+
+    DANGOUR = 15
+    NOTIFICATION = 16
+
 
 
 
