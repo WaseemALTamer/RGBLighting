@@ -8,7 +8,7 @@ namespace SequenceRainbow
     // excuate it and add the schedule it 
 
 
-    extern float transition_speed;
-
+    extern float wave_cycle_duration;
+    extern int color_section_length; // determain the devision for each color 
     void init();
 }

@@ -66,6 +66,8 @@ namespace SequenceManager {
     void apply_sequence(const SetSequence& content) {
         switch (content.sequence) {
             case SEQUENCE_TYPE_RAINBOW:
+                SequenceRainbow::wave_cycle_duration = content.speed;
+                SequenceRainbow::color_section_length = content.width;
                 break;
 
             case SEQUENCE_TYPE_BREATHING:

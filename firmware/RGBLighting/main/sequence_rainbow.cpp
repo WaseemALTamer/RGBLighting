@@ -4,6 +4,8 @@
 #include "config.h"
 
 
+#include "tick_system/tick_controller.h"
+
 
 // this file is responsible for the boot sequence
 // it aims to play a  one  time sequence and this
@@ -27,46 +29,54 @@ namespace SequenceRainbow{
     // then it goes red then it goes black
 
 
-    int color_section_length = 5; // determain the devision for each color 
-    int offset = 0; // controls movement
-    float transition_speed = 0.3;
+    int round_to_nearest_multiple_of_3(int value) {
+        int remainder = value % 3;
 
+        if (remainder == 1) {
+            return value - 1;
+        }
+
+        if (remainder == 2) {
+            return value + 1;
+        }
+
+        return value;
+    }
+
+
+
+    float wave_cycle_duration = 3;
+    int color_section_length = 15;
+    int offset = 0;
+
+    TickController tick_controller;
+    float current_delta = 0;
     
     void step_1(void* ctx){
-        int section_size = color_section_length;
 
-        for (int i = 0; i < LEDS_NUMBER; i++) {
-            int shifted_index = (i + offset);
-            int section_index = (shifted_index / section_size) % 3;
+        // ensure our number that have been given is a multiple of three
+        color_section_length = round_to_nearest_multiple_of_3(color_section_length); 
 
-            float r = 0, g = 0, b = 0;
+        // make sure you only excaute 3 times a wave cycle
+        // red -> green -> blue
+        current_delta += tick_controller.get_elapsed();
+        if (current_delta < wave_cycle_duration / color_section_length) return;
+        current_delta = 0;
 
-            if (section_index == 0){
-                g = 1;
-            }
-            else if (section_index == 1){
-                b = 1;
-            }
-            else{
-                r = 1;
-            }
 
-            // only update leds that that need update other wise continue
-            if (LightingManager::leds[i].r == r&&
-                LightingManager::leds[i].g == g &&
-                LightingManager::leds[i].b == b){
-                    continue;
-                }
-            
-            
-            LightingManager::leds[i].transition(r, g, b, transition_speed * color_section_length);
+        for (int i = 0; i < (LEDS_NUMBER + color_section_length - 1) / color_section_length; i++) {
+            int base = offset + (i * color_section_length);
+
+            int led_index_red   = base % LEDS_NUMBER;
+            int led_index_green = (base + color_section_length / 3) % LEDS_NUMBER;
+            int led_index_blue  = (base + (color_section_length * 2) / 3) % LEDS_NUMBER;
+
+            LightingManager::leds[led_index_red].transition(1, 0, 0, wave_cycle_duration / 3);
+            LightingManager::leds[led_index_green].transition(0, 1, 0, wave_cycle_duration / 3);
+            LightingManager::leds[led_index_blue].transition(0, 0, 1, wave_cycle_duration / 3);
         }
 
-
-        offset++;
-        if (offset >= section_size * 3){
-            offset = 0;
-        }
+        offset = (offset + 1) % color_section_length;
     }
 
 
@@ -82,6 +92,6 @@ namespace SequenceRainbow{
 
 
         SequenceSystem::sequence_steps[0].func = step_1;
-        SequenceSystem::sequence_steps[0].cooldown = transition_speed;
+        SequenceSystem::sequence_steps[0].cooldown = 0.015;
     }
 }
