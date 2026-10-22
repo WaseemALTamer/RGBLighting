@@ -17,6 +17,7 @@ echo Build folder: %BUILD%
 arduino-cli compile -v ^
   --jobs 8 ^
   --fqbn esp32:esp32:esp32 ^
+  --board-options "PartitionScheme=no_ota" ^
   --libraries "%LIBRARIES%" ^
   --build-path "%BUILD%" ^
   "%SKETCH%"
