@@ -129,7 +129,7 @@ input, button {
         <input type="range" id="speed" min="0" max="5" step="0.1" value="1">
     </div>
 
-    <button onclick="sendSettings()">Apply Settings</button>
+    <button onclick="window.sendSettings()">Apply Settings</button>
 </div>
 
 
@@ -160,7 +160,7 @@ input, button {
         <input type="range" id="duration" min="0" max="5" step="0.1" value="1">
     </div>
 
-    <button onclick="sendRGB()">Apply Color</button>
+    <button onclick="window.sendRGB()">Apply Color</button>
 </div>
 
 
@@ -324,6 +324,8 @@ input, button {
         fetch(url);
     }
 
+    window.sendRGB = sendRGB;
+
     // ---------------- SEND SETTINGS ----------------
     function sendSettings() {
 
@@ -333,6 +335,8 @@ input, button {
 
         fetch(url);
     }
+
+    window.sendSettings = sendSettings;
 </script>
 
 
