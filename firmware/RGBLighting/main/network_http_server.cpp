@@ -1,7 +1,7 @@
 #include <WiFi.h>
 #include <LittleFS.h>
 #include <WebServer.h>
-
+#include <WebSocketsServer.h>
 
 
 #include "config.h"
@@ -13,13 +13,49 @@
 #include "sequence_breathing.h"
 #include "sequence_wave.h"
 #include "network_wifi.h"
-
+#include "protocol_event_dispatcher.h"
 
 
 
 namespace HttpServer{
 
     WebServer server(80);
+    WebSocketsServer ws_server(81);
+
+
+    void on_ws_event(
+        uint8_t client_num,
+        WStype_t type,
+        uint8_t* payload,
+        size_t length
+    ) {
+        switch (type) {
+            case WStype_CONNECTED:
+                //Serial.printf("Client %u connected\n", client_num);
+                break;
+
+            case WStype_DISCONNECTED:
+                //Serial.printf("Client %u disconnected\n", client_num);
+                break;
+
+            case WStype_TEXT:
+                //Serial.printf("Received: %.*s\n", (int)length, (char*)payload);
+                break;
+
+            case WStype_BIN:
+                //Serial.printf("Received %u binary bytes\n", (unsigned)length);
+                ProtocalEventDispatcher::handle_message(
+                    payload,
+                    length,
+                    ws_server.remoteIP(client_num), // if we send him a message it is most likely will be over udp
+                    Config::network_port
+                );
+                break;
+
+            default:
+                break;
+        }
+    }
 
 
     void handle_root() {
@@ -28,6 +64,52 @@ namespace HttpServer{
         file.close();
     }
 
+
+    String get_content_type(const String& path) {
+        if (path.endsWith(".html")) return "text/html";
+        if (path.endsWith(".css"))  return "text/css";
+        if (path.endsWith(".js"))   return "application/javascript";
+        if (path.endsWith(".json")) return "application/json";
+        if (path.endsWith(".png"))  return "image/png";
+        if (path.endsWith(".jpg") || path.endsWith(".jpeg")) return "image/jpeg";
+        if (path.endsWith(".gif"))  return "image/gif";
+        if (path.endsWith(".svg"))  return "image/svg+xml";
+        if (path.endsWith(".ico"))  return "image/x-icon";
+        if (path.endsWith(".woff2")) return "font/woff2";
+        if (path.endsWith(".txt"))  return "text/plain";
+
+        return "application/octet-stream";
+    }
+
+
+    void handle_static_file() {
+        String path = server.uri();
+        if (path == "/") {
+            path = "/index.html";
+        }
+
+        if (!LittleFS.exists(path)) {
+            server.send(404, "text/plain", "404: File not found");
+            return;
+        }
+
+        File file = LittleFS.open(path, "r");
+
+        if (!file || file.isDirectory()) {
+            server.send(404, "text/plain", "404: File not found");
+            return;
+        }
+
+        server.streamFile(file, get_content_type(path));
+        file.close();
+    }
+
+
+
+    /*
+        the next two functions are outdated, they need to be removed after you
+        implement the websocket messaging system
+    */
 
     void handel_leds(){
 
@@ -74,8 +156,6 @@ namespace HttpServer{
 
 
     void handel_setting(){
-
-
         if (server.hasArg("transition_speed")) {
             String speedStr = server.arg("transition_speed");
             float transition_speed = speedStr.toFloat();
@@ -90,7 +170,6 @@ namespace HttpServer{
         }
 
         server.send(200, "text/plain", "1");
-
     }
 
 
@@ -98,15 +177,23 @@ namespace HttpServer{
     void init() {
         LittleFS.begin();
 
-        server.on("/", handle_root);
+
+        server.onNotFound(handle_static_file);
+
+
         server.on("/api/all_leds", handel_leds);
         server.on("/api/setting", handel_setting);
         server.begin();
+
+
+        ws_server.begin();
+        ws_server.onEvent(on_ws_event);
     }
 
 
     void loop() {
         server.handleClient();
+        ws_server.loop();
     }
 
 

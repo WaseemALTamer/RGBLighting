@@ -164,9 +164,100 @@ input, button {
 </div>
 
 
+<script type="module">
+    import * as Protocol from "/protocol.js";
+
+    window.Protocol = Protocol; // make it a global available library
 
 
-<script>
+
+
+
+    const WS_URL = `ws://${window.location.hostname}:81/`;
+
+    let ws = null;
+    let reconnectTimer = null;
+    let reconnectDelay = 1000;
+    const MAX_RECONNECT_DELAY = 10000;
+
+    function connectWebSocket() {
+        // Avoid opening duplicate connections
+        if (
+            ws &&
+            (ws.readyState === WebSocket.OPEN ||
+            ws.readyState === WebSocket.CONNECTING)
+        ) {
+            return;
+        }
+
+        console.log("Connecting to WebSocket:", WS_URL);
+
+        ws = new WebSocket(WS_URL);
+        ws.binaryType = "arraybuffer";
+
+        ws.onopen = () => {
+            console.log("WebSocket connected");
+            reconnectDelay = 1000;
+        };
+
+        ws.onmessage = (event) => {
+            console.log("WebSocket message:", event.data);
+
+            // Handle messages from the ESP32 here.
+            // Binary messages arrive as ArrayBuffer.
+            // Example:
+            // const bytes = new Uint8Array(event.data);
+        };
+
+        ws.onerror = (error) => {
+            console.error("WebSocket error:", error);
+            // onclose will normally handle reconnection.
+            // Close explicitly to ensure the connection is cleaned up.
+            ws.close();
+        };
+
+        ws.onclose = () => {
+            console.log(
+                `WebSocket disconnected. Reconnecting in ${reconnectDelay / 1000}s...`
+            );
+
+            clearTimeout(reconnectTimer);
+
+            reconnectTimer = setTimeout(() => {
+                connectWebSocket();
+            }, reconnectDelay);
+
+            // Exponential backoff, capped at 10 seconds
+            reconnectDelay = Math.min(
+                reconnectDelay * 2,
+                MAX_RECONNECT_DELAY
+            );
+        };
+    }
+
+    // Send data only when connected
+    function sendWebSocket(data) {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+            ws.send(data);
+            return true;
+        }
+
+        console.warn("WebSocket is not connected; message not sent.");
+        return false;
+    }
+
+
+    connectWebSocket();
+
+    window.ws = ws;
+    window.ws_send_bytes = sendWebSocket;
+
+
+
+
+
+
+
 
     function loadSettings() {
 
