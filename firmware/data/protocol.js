@@ -375,7 +375,7 @@ export class SetBrightness extends MessageBase {
 }
 
 export class SetDateTime extends MessageBase {
-    static size = 6;
+    static size = 9;
 
     static fields = {
         seconds: ["int", 1],
@@ -424,7 +424,7 @@ export class SetDeviceStatus extends MessageBase {
 }
 
 export class SetSequence extends MessageBase {
-    static size = 21;
+    static size = 32;
 
     static fields = {
         sequence: ["int", 1],

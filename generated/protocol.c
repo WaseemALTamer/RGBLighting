@@ -286,7 +286,7 @@ const uint8_t *set_brightness_decode(SetBrightness *msg, const uint8_t *buffer, 
 
 uint8_t *set_date_time_encode(const SetDateTime *msg, uint8_t *buffer, size_t *buffer_size)
 {
-    if (*buffer_size < 6)
+    if (*buffer_size < 9)
         return NULL;
 
     size_t offset = 0;
@@ -312,7 +312,7 @@ const uint8_t *set_date_time_decode(SetDateTime *msg, const uint8_t *buffer, siz
 {
     if (msg == NULL || buffer == NULL || buffer_size == NULL)
         return NULL;
-    if (*buffer_size < 6)
+    if (*buffer_size < 9)
         return NULL;
 
     size_t offset = 0;
@@ -398,7 +398,7 @@ const uint8_t *set_device_status_decode(SetDeviceStatus *msg, const uint8_t *buf
 
 uint8_t *set_sequence_encode(const SetSequence *msg, uint8_t *buffer, size_t *buffer_size)
 {
-    if (*buffer_size < 21)
+    if (*buffer_size < 32)
         return NULL;
 
     size_t offset = 0;
@@ -439,7 +439,7 @@ const uint8_t *set_sequence_decode(SetSequence *msg, const uint8_t *buffer, size
 {
     if (msg == NULL || buffer == NULL || buffer_size == NULL)
         return NULL;
-    if (*buffer_size < 21)
+    if (*buffer_size < 32)
         return NULL;
 
     size_t offset = 0;

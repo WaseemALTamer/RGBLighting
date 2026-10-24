@@ -304,7 +304,7 @@ class SetDateTime(MessageBase):
     month:int = 0
     year:int = 0
     
-    __size__ = 6
+    __size__ = 9
     __fields__ = {
         "seconds": (int, 1),
         "minutes": (int, 1),
@@ -358,7 +358,7 @@ class SetSequence(MessageBase):
     color_four: int = 0
     color_five: int = 0
 
-    __size__ = 21
+    __size__ = 32
     __fields__ = {
         "sequence":    (int, 1),
         "speed":       (float, 4),
