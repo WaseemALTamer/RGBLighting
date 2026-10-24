@@ -1,0 +1,1478 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <title></title>
+        <style>
+            :root {
+                color-scheme: dark;
+                --bg: #0a0c12;
+                --panel: #121722;
+                --panel2: #171e2b;
+                --line: #252e3d;
+                --muted: #8792a5;
+                --text: #eef3fb;
+                --accent: #a4f06b;
+                --accent2: #c2ff92;
+                --danger: #ff6d7a
+            }
+
+            * {
+                box-sizing: border-box
+            }
+
+            body {
+                margin: 0;
+                background: radial-gradient(ellipse at 70% -15%,#243524 0,transparent 38%),var(--bg);
+                color: var(--text);
+                font: 14px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;
+                min-height: 100vh
+            }
+
+            button,input,select {
+                font: inherit
+            }
+
+            button {
+                cursor: pointer
+            }
+
+            .app {
+                max-width: 1440px;
+                margin: auto;
+                padding: 28px 30px 48px
+            }
+
+            .topbar {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 20px;
+                margin-bottom: 30px
+            }
+
+            .brand {
+                display: flex;
+                align-items: center;
+                gap: 12px
+            }
+
+            .logo {
+                width: 42px;
+                height: 42px;
+                border-radius: 14px;
+                background: var(--accent);
+                display: grid;
+                place-items: center;
+                color: #10160b;
+                font-size: 23px;
+                font-weight: 900;
+                box-shadow: 0 0 30px #a4f06b30
+            }
+
+            .brand h1 {
+                font-size: 19px;
+                margin: 0;
+                letter-spacing: -.5px
+            }
+
+            .brand p {
+                margin: 2px 0 0;
+                color: var(--muted);
+                font-size: 12px
+            }
+
+            .top-actions {
+                display: flex;
+                align-items: center;
+                gap: 12px
+            }
+
+            .status {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 9px 13px;
+                border: 1px solid var(--line);
+                border-radius: 999px;
+                color: var(--muted);
+                background: #111620
+            }
+
+            .dot {
+                width: 7px;
+                height: 7px;
+                background: #6f7888;
+                border-radius: 50%
+            }
+
+            .status.online {
+                color: var(--accent)
+            }
+
+            .status.online .dot {
+                background: var(--accent);
+                box-shadow: 0 0 12px #a4f06b88
+            }
+
+            .connect-btn,.primary {
+                border: 0;
+                background: var(--accent);
+                color: #10160b;
+                font-weight: 750;
+                border-radius: 11px;
+                padding: 11px 16px
+            }
+
+            .connect-btn:hover,.primary:hover {
+                background: var(--accent2)
+            }
+
+            .subtle {
+                background: var(--panel2);
+                border: 1px solid var(--line);
+                color: var(--text);
+                border-radius: 10px;
+                padding: 10px 13px
+            }
+
+            .hero {
+                display: grid;
+                grid-template-columns: 1.45fr .75fr;
+                gap: 18px;
+                margin-bottom: 20px
+            }
+
+            .hero-main,.hero-side,.card {
+                background: linear-gradient(145deg,#151c28,#111620);
+                border: 1px solid var(--line);
+                border-radius: 19px
+            }
+
+            .hero-main {
+                padding: 24px;
+                min-height: 222px;
+                position: relative;
+                overflow: hidden
+            }
+
+            .eyebrow {
+                font-size: 11px;
+                letter-spacing: 1.7px;
+                text-transform: uppercase;
+                color: var(--muted);
+                font-weight: 750
+            }
+
+            .hero-main h2 {
+                font-size: 29px;
+                letter-spacing: -1.2px;
+                margin: 10px 0 7px;
+                max-width: 460px
+            }
+
+            .hero-main p {
+                color: var(--muted);
+                max-width: 440px;
+                margin: 0
+            }
+
+            .hero-glow {
+                position: absolute;
+                right: 4%;
+                top: 15%;
+                width: 190px;
+                height: 150px;
+                background: radial-gradient(ellipse,#a4f06b32,transparent 70%);
+                filter: blur(7px);
+                pointer-events: none
+            }
+
+            .led-preview {
+                display: flex;
+                gap: 4px;
+                align-items: center;
+                margin-top: 25px;
+                max-width: 500px;
+                position: relative
+            }
+
+            .led-preview span {
+                height: 9px;
+                flex: 1;
+                border-radius: 5px;
+                background: #a4f06b;
+                box-shadow: 0 0 13px #a4f06b70
+            }
+
+            .led-preview span:nth-child(3n) {
+                opacity: .45
+            }
+
+            .hero-side {
+                padding: 22px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between
+            }
+
+            .device-head {
+                display: flex;
+                align-items: center;
+                justify-content: space-between
+            }
+
+            .device-head h3 {
+                margin: 0;
+                font-size: 14px
+            }
+
+            .pill {
+                font-size: 11px;
+                color: var(--accent);
+                background: #a4f06b16;
+                padding: 5px 8px;
+                border-radius: 7px
+            }
+
+            .device-name {
+                font-size: 21px;
+                font-weight: 750;
+                margin: 15px 0 4px
+            }
+
+            .device-meta {
+                color: var(--muted);
+                font-size: 12px
+            }
+
+            .device-stats {
+                display: flex;
+                gap: 20px;
+                margin-top: 20px
+            }
+
+            .stat small {
+                display: block;
+                color: var(--muted);
+                font-size: 11px
+            }
+
+            .stat strong {
+                display: block;
+                font-size: 17px;
+                margin-top: 3px
+            }
+
+            .layout {
+                display: grid;
+                grid-template-columns: minmax(0,1.45fr) minmax(320px,.8fr);
+                gap: 18px;
+                align-items: start
+            }
+
+            .stack {
+                display: grid;
+                gap: 18px
+            }
+
+            .card {
+                padding: 22px
+            }
+
+            .card-head {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                gap: 15px;
+                margin-bottom: 20px
+            }
+
+            .card-head h3 {
+                font-size: 16px;
+                margin: 0 0 4px;
+                letter-spacing: -.3px
+            }
+
+            .card-head p {
+                margin: 0;
+                color: var(--muted);
+                font-size: 12px
+            }
+
+            .section-num {
+                font-size: 11px;
+                color: var(--muted);
+                border: 1px solid var(--line);
+                border-radius: 7px;
+                padding: 5px 8px
+            }
+
+            .range-row {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 9px
+            }
+
+            .range-row label,.field label {
+                font-size: 12px;
+                color: #c6cedb;
+                font-weight: 650
+            }
+
+            .value {
+                font-size: 13px;
+                color: var(--accent);
+                font-variant-numeric: tabular-nums
+            }
+
+            .range {
+                width: 100%;
+                accent-color: var(--accent);
+                cursor: pointer;
+                height: 5px
+            }
+
+            .ticks {
+                display: flex;
+                justify-content: space-between;
+                color: #6f7a8c;
+                font-size: 10px;
+                margin-top: 8px
+            }
+
+            .brightness-block {
+                padding: 16px;
+                background: #0e131c;
+                border: 1px solid var(--line);
+                border-radius: 13px;
+                margin-bottom: 20px
+            }
+
+            .field-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 13px
+            }
+
+            .field {
+                display: grid;
+                gap: 7px
+            }
+
+            .field input[type=text],.field input[type=number],.field select,.host-input {
+                background: #0c1119;
+                border: 1px solid var(--line);
+                border-radius: 9px;
+                color: var(--text);
+                padding: 10px 11px;
+                width: 100%;
+                outline: none
+            }
+
+            .field input:focus,.field select:focus,.host-input:focus {
+                border-color: #8bc95c
+            }
+
+            .color-row {
+                display: grid;
+                grid-template-columns: 100px 1fr;
+                gap: 16px;
+                align-items: center;
+                margin: 17px 0
+            }
+
+            .color-well {
+                height: 92px;
+                border-radius: 14px;
+                background: #ffc0c0;
+                box-shadow: inset 0 0 0 1px #ffffff22,0 8px 30px #ffc0c024;
+                position: relative;
+                overflow: hidden
+            }
+
+            .color-well:after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(135deg,#ffffff35,transparent 45%)
+            }
+
+            .rgb-controls {
+                display: grid;
+                gap: 12px
+            }
+
+            .rgb-line {
+                display: grid;
+                grid-template-columns: 18px 1fr 38px;
+                align-items: center;
+                gap: 10px
+            }
+
+            .rgb-line label {
+                font-size: 11px;
+                font-weight: 800
+            }
+
+            .rgb-line output {
+                text-align: right;
+                font-size: 12px;
+                color: var(--muted);
+                font-variant-numeric: tabular-nums
+            }
+
+            .r {
+                color: #ff777e
+            }
+
+            .g {
+                color: #83e7a0
+            }
+
+            .b {
+                color: #78b9ff
+            }
+
+            .swatches {
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+                margin: 15px 0 19px
+            }
+
+            .swatch {
+                width: 27px;
+                height: 27px;
+                border: 2px solid #ffffff1c;
+                border-radius: 9px;
+                padding: 0
+            }
+
+            .swatch:hover {
+                transform: translateY(-2px)
+            }
+
+            .button-row {
+                display: flex;
+                gap: 9px
+            }
+
+            .button-row button {
+                flex: 1
+            }
+
+            .primary {
+                padding: 12px 15px
+            }
+
+            .secondary {
+                background: #1a2230;
+                border: 1px solid var(--line);
+                color: var(--text);
+                border-radius: 11px;
+                padding: 11px 14px;
+                font-weight: 650
+            }
+
+            .secondary:hover {
+                background: #232d3d
+            }
+
+            .segmented {
+                display: flex;
+                background: #0c1119;
+                border: 1px solid var(--line);
+                padding: 4px;
+                border-radius: 11px;
+                gap: 3px
+            }
+
+            .segmented button {
+                flex: 1;
+                border: 0;
+                background: transparent;
+                color: var(--muted);
+                padding: 8px 6px;
+                border-radius: 7px;
+                font-size: 12px
+            }
+
+            .segmented button.active {
+                background: #283342;
+                color: var(--text)
+            }
+
+            .range-fields {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+                margin: 15px 0
+            }
+
+            .hint {
+                font-size: 11px;
+                color: var(--muted);
+                margin-top: 8px
+            }
+
+            .sequence-grid {
+                display: grid;
+                grid-template-columns: repeat(3,minmax(0,1fr));
+                gap: 10px
+            }
+
+            .sequence {
+                background: #0e131c;
+                border: 1px solid var(--line);
+                border-radius: 13px;
+                padding: 12px;
+                text-align: left;
+                color: var(--text);
+                min-width: 0;
+                transition: .15s
+            }
+
+            .sequence:hover {
+                border-color: #61734f;
+                transform: translateY(-1px)
+            }
+
+            .sequence.active {
+                border-color: var(--accent);
+                background: #a4f06b0b;
+                box-shadow: inset 0 0 0 1px #a4f06b20
+            }
+
+            .seq-art {
+                height: 50px;
+                border-radius: 8px;
+                margin-bottom: 11px;
+                position: relative;
+                overflow: hidden;
+                background: #1a2230
+            }
+
+            .seq-art:before,.seq-art:after {
+                content: "";
+                position: absolute;
+                inset: 0
+            }
+
+            .rainbow:before {
+                background: linear-gradient(90deg,#ff496a,#ffb04a,#f5ee6d,#76ee8a,#60c7ff,#a87bff)
+            }
+
+            .breath:before {
+                background: radial-gradient(ellipse at center,#c4ff89,transparent 70%)
+            }
+
+            .wave:before {
+                background: repeating-linear-gradient(115deg,transparent 0 12px,#58d9ff 13px 17px,transparent 18px 28px)
+            }
+
+            .cycle:before {
+                background: linear-gradient(90deg,#ff5575 0 33%,#b3ff78 33% 66%,#7d8bff 66%)
+            }
+
+            .fire:before {
+                background: linear-gradient(0deg,#ff4d25,#ff9b32 45%,#f6e67a)
+            }
+
+            .twinkle:before {
+                background: radial-gradient(circle at 18% 35%,white 0 2px,transparent 3px),radial-gradient(circle at 55% 68%,#a4f06b 0 2px,transparent 3px),radial-gradient(circle at 80% 22%,white 0 2px,transparent 3px),#17202b
+            }
+
+            .wipe:before {
+                background: linear-gradient(90deg,#18202c 0 35%,#b3ff78 36% 62%,#18202c 63%)
+            }
+
+            .chase:before {
+                background: repeating-linear-gradient(90deg,#ff5575 0 7px,#202938 7px 15px)
+            }
+
+            .scanner:before {
+                background: linear-gradient(90deg,#17202b,#68e9ff,#17202b)
+            }
+
+            .seq-name {
+                font-weight: 700;
+                font-size: 12px;
+                display: block
+            }
+
+            .seq-desc {
+                font-size: 10px;
+                color: var(--muted);
+                display: block;
+                margin-top: 3px
+            }
+
+            .seq-tune {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+                margin-top: 17px
+            }
+
+            .seq-colors {
+                display: flex;
+                gap: 7px;
+                margin-top: 16px
+            }
+
+            .seq-color {
+                height: 28px;
+                flex: 1;
+                border-radius: 7px;
+                border: 1px solid #ffffff1c
+            }
+
+            .sequence-colors {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 9px;
+                margin-top: 16px
+            }
+
+            .sequence-color-field {
+                display: grid;
+                grid-template-columns: 86px 1fr;
+                align-items: center;
+                gap: 10px
+            }
+
+            .sequence-color-field>label {
+                font-size: 11px;
+                color: #c6cedb;
+                font-weight: 650
+            }
+
+            .color-input-wrap {
+                display: grid;
+                grid-template-columns: 42px 1fr;
+                gap: 8px
+            }
+
+            .color-input-wrap input[type=color] {
+                width: 42px;
+                height: 35px;
+                padding: 3px;
+                border: 1px solid var(--line);
+                border-radius: 8px;
+                background: #0c1119;
+                cursor: pointer
+            }
+
+            .color-input-wrap input[type=text] {
+                width: 100%;
+                min-width: 0;
+                background: #0c1119;
+                border: 1px solid var(--line);
+                border-radius: 8px;
+                color: var(--text);
+                padding: 8px 10px;
+                font-size: 12px;
+                text-transform: uppercase
+            }
+
+            .sequence-status {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 17px;
+                padding-top: 15px;
+                border-top: 1px solid var(--line)
+            }
+
+            .sequence-status strong {
+                font-size: 12px
+            }
+
+            .sequence-status span {
+                color: var(--muted);
+                font-size: 11px
+            }
+
+            .connection-fields {
+                display: grid;
+                grid-template-columns: 1fr auto;
+                gap: 8px
+            }
+
+            .toast {
+                position: fixed;
+                bottom: 22px;
+                left: 50%;
+                transform: translate(-50%,20px);
+                background: #202b38;
+                border: 1px solid #384759;
+                border-radius: 12px;
+                padding: 11px 16px;
+                opacity: 0;
+                pointer-events: none;
+                transition: .2s;
+                z-index: 5;
+                box-shadow: 0 10px 40px #0007;
+                max-width: 90vw
+            }
+
+            .toast.show {
+                opacity: 1;
+                transform: translate(-50%,0)
+            }
+
+            .foot {
+                color: #687386;
+                font-size: 11px;
+                text-align: center;
+                margin-top: 25px
+            }
+
+            .hidden {
+                display: none!important
+            }
+
+            .hero-connection {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+                margin-top: 30px;
+                /* Space between the two sections */
+            }
+
+            @media(max-width: 900px) {
+                .hero {
+                    grid-template-columns:1fr
+                }
+
+                .layout {
+                    grid-template-columns: 1fr
+                }
+
+                .hero-side {
+                    min-height: 170px
+                }
+            }
+
+            @media(max-width: 560px) {
+                .app {
+                    padding:18px 13px 35px
+                }
+
+                .topbar {
+                    align-items: flex-start
+                }
+
+                .top-actions {
+                    flex-direction: column;
+                    align-items: flex-end
+                }
+
+                .brand h1 {
+                    font-size: 17px
+                }
+
+                .hero-main {
+                    padding: 20px
+                }
+
+                .hero-main h2 {
+                    font-size: 25px
+                }
+
+                .hero-glow {
+                    right: -20%;
+                    opacity: .6
+                }
+
+                .card {
+                    padding: 17px
+                }
+
+                .sequence-grid {
+                    grid-template-columns: repeat(2,minmax(0,1fr))
+                }
+
+                .field-grid {
+                    grid-template-columns: 1fr 1fr
+                }
+
+                .color-row {
+                    grid-template-columns: 75px 1fr
+                }
+
+                .color-well {
+                    height: 82px
+                }
+
+                .connection-fields {
+                    grid-template-columns: 1fr
+                }
+
+                .connection-fields button {
+                    width: 100%
+                }
+
+                .status {
+                    font-size: 11px
+                }
+
+                .top-actions .connect-btn {
+                    padding: 9px 12px
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="app">
+            <header class="topbar"></header>
+            <main class="layout">
+                <div class="stack">
+                    <section class="card">
+                        <div class="card-head">
+                            <div>
+                                <h3>Light output</h3>
+                                <p>Adjust brightness and transition feel.</p>
+                            </div>
+                            <span class="section-num">01 / OUTPUT</span>
+                        </div>
+                        <div class="brightness-block">
+                            <div class="range-row">
+                                <label for="brightness">Master brightness</label>
+                                <span class="value">
+                                    <b id="brightnessVal">70</b>
+                                    %
+                                </span>
+                            </div>
+                            <input class="range" id="brightness" type="range" min="0" max="100" value="70">
+                            <div class="ticks">
+                                <span>Off</span>
+                                <span>Balanced</span>
+                                <span>Full power</span>
+                            </div>
+                        </div>
+                        <div class="field-grid">
+                            <div class="field">
+                                <label for="transition">Transition duration (seconds)</label>
+                                <input id="transition" type="number" min="0" max="60" step=".1" value="5">
+                            </div>
+                            <div class="field">
+                                <label for="ledCount">LED strip length</label>
+                                <input id="ledCount" type="number" min="1" max="65535" step="1" value="150">
+                            </div>
+                        </div>
+                        <div style="margin-top:16px">
+                            <button class="primary" id="applyBrightness" style="width:100%">Apply brightness ↗</button>
+                        </div>
+                        <div style="margin-top:16px">
+                            <button class="primary" id="zeroBrightness" style="width:100%">Tunn off ↗</button>
+                        </div>
+                    </section>
+                    <section class="card">
+                        <div class="card-head">
+                            <div>
+                                <h3>Color canvas</h3>
+                                <p>Choose one color for the whole strip or target a range.</p>
+                            </div>
+                            <span class="section-num">02 / COLOR</span>
+                        </div>
+                        <div class="segmented" role="tablist" aria-label="Color target">
+                            <button class="active" data-target="all">Entire strip</button>
+                            <button data-target="range">LED range</button>
+                        </div>
+                        <div class="range-fields hidden" id="rangeFields">
+                            <div class="field">
+                                <label for="startLed">Start LED (0-based)</label>
+                                <input id="startLed" type="number" min="0" value="75">
+                            </div>
+                            <div class="field">
+                                <label for="endLed">End LED (inclusive)</label>
+                                <input id="endLed" type="number" min="0" value="150">
+                            </div>
+                        </div>
+                        <div class="hint" id="targetHint">This color will be sent to every LED in the strip.</div>
+                        <div class="color-row">
+                            <div class="color-well" id="colorWell"></div>
+                            <div class="rgb-controls">
+                                <div class="rgb-line">
+                                    <label class="r" for="red">R</label>
+                                    <input class="range" id="red" type="range" min="0" max="255" value="255">
+                                    <output id="redVal">255</output>
+                                </div>
+                                <div class="rgb-line">
+                                    <label class="g" for="green">G</label>
+                                    <input class="range" id="green" type="range" min="0" max="255" value="192">
+                                    <output id="greenVal">192</output>
+                                </div>
+                                <div class="rgb-line">
+                                    <label class="b" for="blue">B</label>
+                                    <input class="range" id="blue" type="range" min="0" max="255" value="192">
+                                    <output id="blueVal">192</output>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="hexColor">HEX color</label>
+                            <input id="hexColor" type="text" value="#ffc0c0" maxlength="7" spellcheck="false">
+                        </div>
+                        <div class="swatches" aria-label="Color presets">
+                            <button class="swatch" data-color="#ffc0c0" style="background:#ffc0c0" title="Lime"></button>
+                            <button class="swatch" data-color="#ffc000" style="background:#ffc000" title="Ice"></button>
+                            <button class="swatch" data-color="#ff00c0" style="background:#ff00c0" title="Violet"></button>
+                            <button class="swatch" data-color="#ffc0c0" style="background:#ffc0c0" title="Rose"></button>
+                            <button class="swatch" data-color="#FFAC55" style="background:#FFAC55" title="Amber"></button>
+                            <button class="swatch" data-color="#FFFFFF" style="background:#FFFFFF" title="White"></button>
+                            <button class="swatch" data-color="#000000" style="background:#000000" title="Off"></button>
+                        </div>
+                        <div class="field" style="margin-bottom:17px">
+                            <label for="colorDuration">Color transition (seconds)</label>
+                            <input id="colorDuration" type="number" min="0" max="60" step=".1" value="1">
+                        </div>
+                        <div class="button-row">
+                            <button class="secondary" id="previewColor">Preview locally</button>
+                            <button class="primary" id="applyColor">Apply color ↗</button>
+                        </div>
+                    </section>
+                </div>
+                <div class="stack">
+                    <section class="card">
+                        <div class="card-head">
+                            <div>
+                                <h3>Sequence library</h3>
+                                <p>Pick an effect, then tune its movement and palette.</p>
+                            </div>
+                            <span class="section-num">03 / PLAY</span>
+                        </div>
+                        <div class="sequence-grid" id="sequenceGrid" aria-live="polite"></div>
+                        <div class="seq-tune">
+                            <div class="field">
+                                <label for="seqSpeed">Speed</label>
+                                <input id="seqSpeed" type="number" min="0" max="100" step=".1" value="5">
+                            </div>
+                            <div class="field">
+                                <label for="seqWidth">Width</label>
+                                <input id="seqWidth" type="number" min="0" max="65535" step="1" value="15">
+                            </div>
+                            <div class="field">
+                                <label for="seqHeight">Height / intensity</label>
+                                <input id="seqHeight" type="number" min="0" max="65535" step=".1" value="0">
+                            </div>
+                            <div class="field">
+                                <label for="seqDirection">Direction</label>
+                                <select id="seqDirection">
+                                    <option value="0" selected>Forward</option>
+                                    <option value="1">Reverse</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hint">Selected sequence colors are taken from the RGB controls and preset palette below.</div>
+                        <div class="sequence-colors" id="sequenceColors">
+                            <div class="sequence-color-field">
+                                <label for="seqColor1">Color one</label>
+                                <div class="color-input-wrap">
+                                    <input type="color" id="seqColor1" value="#ffc000">
+                                    <input type="text" id="seqColorHex1" value="#ffc000" maxlength="7" aria-label="Color one HEX value">
+                                </div>
+                            </div>
+                            <div class="sequence-color-field">
+                                <label for="seqColor2">Color two</label>
+                                <div class="color-input-wrap">
+                                    <input type="color" id="seqColor2" value="#ff00c0">
+                                    <input type="text" id="seqColorHex2" value="#ff00c0" maxlength="7" aria-label="Color two HEX value">
+                                </div>
+                            </div>
+                            <div class="sequence-color-field">
+                                <label for="seqColor3">Color three</label>
+                                <div class="color-input-wrap">
+                                    <input type="color" id="seqColor3" value="#ffc0c0">
+                                    <input type="text" id="seqColorHex3" value="#ffc0c0" maxlength="7" aria-label="Color three HEX value">
+                                </div>
+                            </div>
+                            <div class="sequence-color-field">
+                                <label for="seqColor4">Color four</label>
+                                <div class="color-input-wrap">
+                                    <input type="color" id="seqColor4" value="#9B7BFF">
+                                    <input type="text" id="seqColorHex4" value="#9B7BFF" maxlength="7" aria-label="Color four HEX value">
+                                </div>
+                            </div>
+                            <div class="sequence-color-field">
+                                <label for="seqColor5">Color five</label>
+                                <div class="color-input-wrap">
+                                    <input type="color" id="seqColor5" value="#FFAC55">
+                                    <input type="text" id="seqColorHex5" value="#FFAC55" maxlength="7" aria-label="Color five HEX value">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="button-row" style="margin-top:18px">
+                            <button class="secondary" id="stopSequence">Stop effect</button>
+                            <button class="primary" id="playSequence">Play sequence ▶</button>
+                        </div>
+                        <div class="sequence-status">
+                            <strong id="sequenceStatus">Rainbow selected</strong>
+                            <span id="sequenceSubstatus">Ready to play</span>
+                        </div>
+                    </section>
+                    <section class="card">
+                        <aside class="hero-side">
+                            <div>
+                                <div class="device-head">
+                                    <h3>Connected device</h3>
+                                    <span class="pill" id="devicePill">WAITING</span>
+                                </div>
+                                <div class="device-name" id="deviceName">RoomRGB</div>
+                                <div class="device-meta" id="deviceMeta">WebSocket · port 81</div>
+                            </div>
+                            <div class="device-stats">
+                                <div class="stat">
+                                    <small>LED COUNT</small>
+                                    <strong id="ledCountStat">150</strong>
+                                </div>
+                                <div class="stat">
+                                    <small>FIRMWARE</small>
+                                    <strong id="firmwareStat">—</strong>
+                                </div>
+                                <div class="stat">
+                                    <small>BRIGHTNESS</small>
+                                    <strong id="brightnessStat">70%</strong>
+                                </div>
+                            </div>
+                            <div class="hero-connection">
+                                <button class="connect-btn" id="connectBtn">Reconnect ↗</button>
+                                <div class="status" id="status">
+                                    <span class="dot"></span>
+                                    <span id="statusText">Connecting…</span>
+                                </div>
+                                
+                            </div>
+                        </aside>
+                    </section>
+                    <section class="card">
+                        <div class="card-head">
+                            <div>
+                                <h3>Device connection</h3>
+                                <p>WebSocket binary protocol · no color HTTP requests.</p>
+                            </div>
+                            <span class="section-num">04 / DEVICE</span>
+                        </div>
+                        <div class="field" style="margin-bottom:12px">
+                            <label for="host">Device hostname or IP</label>
+                            <div class="connection-fields">
+                                <input class="host-input" id="host" type="text" placeholder="e.g. 192.168.1.50">
+                                <button class="secondary" id="saveHost">Set host</button>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="wsUrl">WebSocket endpoint</label>
+                            <input id="wsUrl" type="text" readonly>
+                        </div>
+                    </section>
+                </div>
+            </main>
+            <div class="foot"></div>
+        </div>
+        <div class="toast" id="toast" role="status"></div>
+        <script type="module">
+            const ContentType = {
+                NONE: 0,
+                BYTES_STREAM: 1,
+                MESSAGE: 2,
+                COMMAND: 3,
+                INFORMATION: 4,
+                DISCOVERY: 5,
+                WIFI_CONNECT: 6,
+                SET_DEVICE_STATUS: 7,
+                SET_DEVICE_NAME: 8,
+                SET_DATE_TIME: 9,
+                SET_SEQUENCE: 10,
+                SET_SETTING: 11,
+                SET_BRIGHTNESS: 12,
+                RGB_STREAM: 13
+            };
+            const SequenceType = {
+                NONE: 0,
+                RAINBOW: 1,
+                BREATHING: 2,
+                WAVE: 3,
+                COLOR_CYCLE: 4,
+                SLEEP: 5,
+                WAKEUP: 6,
+                COLOR_WIPE: 7,
+                CHASE: 8,
+                PULSE: 9,
+                FIRE: 10,
+                TWINKLE: 11,
+                SCANNER: 12,
+                PROGRESS: 13,
+                ALERT: 14,
+                DANGOUR: 15,
+                NOTIFICATION: 16
+            };
+            const $ = id => document.getElementById(id);
+            let ws = null
+              , reconnectTimer = null
+              , reconnectDelay = 1000
+              , manualClose = false
+              , sequenceNumber = 0
+              , target = 'all'
+              , selectedSequence = 1
+              , previewOnly = false
+              , ledCount = 150;
+            const MAX_RECONNECT_DELAY = 10000;
+            const sequenceDescriptions = {
+                RAINBOW: 'Full-spectrum flow',
+                BREATHING: 'Soft ambient pulse',
+                WAVE: 'Rolling color wave',
+                COLOR_CYCLE: 'Cycle through colors',
+                SLEEP: 'Fade toward darkness',
+                WAKEUP: 'Gradual light-up',
+                COLOR_WIPE: 'Sweep across the strip',
+                CHASE: 'Moving light segments',
+                PULSE: 'Rhythmic light pulse',
+                FIRE: 'Warm flickering glow',
+                TWINKLE: 'Star-like sparkles',
+                SCANNER: 'Back-and-forth beam',
+                PROGRESS: 'Progress-style indicator',
+                ALERT: 'Attention-grabbing effect',
+                DANGOUR: 'Danger alert effect',
+                NOTIFICATION: 'Notification effect'
+            };
+            const sequenceArt = {
+                RAINBOW: 'rainbow',
+                BREATHING: 'breath',
+                WAVE: 'wave',
+                COLOR_CYCLE: 'cycle',
+                COLOR_WIPE: 'wipe',
+                CHASE: 'chase',
+                FIRE: 'fire',
+                TWINKLE: 'twinkle',
+                SCANNER: 'scanner'
+            };
+            const seqNames = Object.fromEntries(Object.entries(SequenceType).map( ([name,id]) => [id, name.replaceAll('_', ' ').toLowerCase().replace(/\\b\\w/g, c => c.toUpperCase())]));
+            function clamp(v, min, max) {
+                return Math.max(min, Math.min(max, Number(v) || 0))
+            }
+            function intLE(value, size) {
+                let n = BigInt(Math.trunc(Number(value) || 0));
+                const out = new Uint8Array(size);
+                for (let i = 0; i < size; i++) {
+                    out[i] = Number(n & 255n);
+                    n >>= 8n
+                }
+                if (n !== 0n)
+                    throw new RangeError(`Integer does not fit in ${size} bytes`);
+                return out
+            }
+            function floatLE(value) {
+                const b = new ArrayBuffer(4);
+                new DataView(b).setFloat32(0, Number(value) || 0, true);
+                return new Uint8Array(b)
+            }
+            function strFixed(value, size) {
+                const out = new Uint8Array(size);
+                const encoded = new TextEncoder().encode(value);
+                if (encoded.length > size)
+                    throw new RangeError('String is too long');
+                out.set(encoded);
+                return out
+            }
+            function concat(...arrays) {
+                const out = new Uint8Array(arrays.reduce( (n, a) => n + a.length, 0));
+                let offset = 0;
+                for (const a of arrays) {
+                    out.set(a, offset);
+                    offset += a.length
+                }
+                return out
+            }
+            function packMessage(innerType, innerPayload) {
+                // Message fields are serialized in declared order: 1+64+6+8+1+1 = 81 bytes.
+                const header = concat(intLE(2, 1), strFixed('RoomRGB', 64), intLE(0, 6), float64LE(Date.now() / 1000), intLE(0, 1), intLE(ContentType.COMMAND, 1));
+                const command = concat(intLE(++sequenceNumber, 8), intLE(innerType, 1), innerPayload);
+                return concat(header, command);
+            }
+            function float64LE(v) {
+                const b = new ArrayBuffer(8);
+                new DataView(b).setFloat64(0, v, true);
+                return new Uint8Array(b)
+            }
+            function sendCommand(type, payload, label) {
+                if (!ws || ws.readyState !== WebSocket.OPEN) {
+                    toast('Not connected — command was not sent.');
+                    return false
+                }
+                try {
+                    ws.send(packMessage(type, payload));
+                    toast(`${label} sent to device`);
+                    return true
+                } catch (e) {
+                    console.error(e);
+                    toast(`Could not encode command: ${e.message}`);
+                    return false
+                }
+            }
+            function commandPayload(type, payload) {
+                return concat(intLE(sequenceNumber + 1, 8), intLE(type, 1), payload)
+            }
+            function currentRGB() {
+                return [Number($('red').value), Number($('green').value), Number($('blue').value)]
+            }
+            function packedRGB(rgb) {
+                return rgb[0] * 65536 + rgb[1] * 256 + rgb[2]
+            }
+            function getDuration(id) {
+                return clamp($(id).value, 0, 60)
+            }
+            function updateColorUI() {
+                const [r,g,b] = currentRGB();
+                $('redVal').value = r;
+                $('greenVal').value = g;
+                $('blueVal').value = b;
+                $('colorWell').style.background = `rgb(${r},${g},${b})`;
+                $('hexColor').value = '#' + [r, g, b].map(v => v.toString(16).padStart(2, '0')).join('').toUpperCase();
+            }
+            function hexToPacked(hex) {
+                return parseInt(hex.replace('#', ''), 16) >>> 0
+            }
+            function getSequenceColors() {
+                return [1, 2, 3, 4, 5].map(i => hexToPacked($('seqColor' + i).value))
+            }
+            function bindSequenceColorInputs() {
+                for (let i = 1; i <= 5; i++) {
+                    const picker = $('seqColor' + i)
+                      , hex = $('seqColorHex' + i);
+                    picker.addEventListener('input', () => {
+                        hex.value = picker.value.toUpperCase()
+                    }
+                    );
+                    hex.addEventListener('change', () => {
+                        const value = hex.value.trim();
+                        if (/^#?[0-9a-f]{6}$/i.test(value)) {
+                            const normalized = '#' + value.replace('#', '').toUpperCase();
+                            picker.value = normalized;
+                            hex.value = normalized
+                        } else {
+                            hex.value = picker.value.toUpperCase();
+                            toast('Enter a valid 6-digit HEX color.')
+                        }
+                    }
+                    )
+                }
+            }
+            function renderSequenceButtons() {
+                const grid = $('sequenceGrid');
+                grid.innerHTML = '';
+                for (const [name,id] of Object.entries(SequenceType)) {
+                    if (id === SequenceType.NONE)
+                        continue;
+                    const button = document.createElement('button');
+                    button.className = 'sequence' + (id === selectedSequence ? ' active' : '');
+                    button.dataset.seq = String(id);
+                    const art = document.createElement('span');
+                    art.className = 'seq-art ' + (sequenceArt[name] || '');
+                    const title = document.createElement('span');
+                    title.className = 'seq-name';
+                    title.textContent = seqNames[id] || name;
+                    const desc = document.createElement('span');
+                    desc.className = 'seq-desc';
+                    desc.textContent = sequenceDescriptions[name] || 'Protocol sequence';
+                    button.append(art, title, desc);
+                    button.addEventListener('click', () => {
+                        selectedSequence = id;
+                        document.querySelectorAll('[data-seq]').forEach(b => b.classList.toggle('active', b === button));
+                        $('sequenceStatus').textContent = (seqNames[id] || name) + ' selected';
+                        $('sequenceSubstatus').textContent = 'Ready to play'
+                    }
+                    );
+                    grid.appendChild(button)
+                }
+            }
+            function updateBrightness() {
+                const v = $('brightness').value;
+                $('brightnessVal').textContent = v;
+                $('brightnessStat').textContent = v + '%'
+            }
+            function toast(message) {
+                const t = $('toast');
+                t.textContent = message;
+                t.classList.add('show');
+                clearTimeout(toast.timer);
+                toast.timer = setTimeout( () => t.classList.remove('show'), 2600)
+            }
+            function setStatus(state, text) {
+                $('status').classList.toggle('online', state === 'online');
+                $('statusText').textContent = text;
+                $('devicePill').textContent = state === 'online' ? 'ONLINE' : state === 'connecting' ? 'CONNECTING' : 'OFFLINE'
+            }
+            function currentWsUrl() {
+                const host = $('host').value.trim() || window.location.hostname || 'localhost';
+                const scheme = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+                return `${scheme}//${host}:81/`
+            }
+            function connect() {
+                manualClose = false;
+                clearTimeout(reconnectTimer);
+                const url = currentWsUrl();
+                $('wsUrl').value = url;
+                if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
+                    if (ws.url === url)
+                        return;
+                    ws.onclose = null;
+                    ws.close()
+                }
+                setStatus('connecting', 'Connecting…');
+                try {
+                    ws = new WebSocket(url);
+                    ws.binaryType = 'arraybuffer';
+                    ws.onopen = () => {
+                        reconnectDelay = 1000;
+                        setStatus('online', 'Connected');
+                        $('deviceMeta').textContent = url;
+                        toast('WebSocket connected')
+                    }
+                    ;
+                    ws.onmessage = e => handleIncoming(e.data);
+                    ws.onerror = () => {
+                        if (ws)
+                            ws.close()
+                    }
+                    ;
+                    ws.onclose = () => {
+                        setStatus('offline', 'Disconnected');
+                        if (!manualClose) {
+                            clearTimeout(reconnectTimer);
+                            reconnectTimer = setTimeout(connect, reconnectDelay);
+                            reconnectDelay = Math.min(reconnectDelay * 2, MAX_RECONNECT_DELAY)
+                        }
+                    }
+                } catch (e) {
+                    console.error(e);
+                    setStatus('offline', 'Connection failed')
+                }
+            }
+            function handleIncoming(data) {
+                if (typeof data === 'string') {
+                    console.log('Device message:', data);
+                    return
+                }
+                if (!(data instanceof ArrayBuffer))
+                    return;
+                const b = new Uint8Array(data);
+                console.log('Binary device message:', b);
+                /* Incoming Message/Information parsing can be added once device response framing is defined. */
+            }
+            function setBrightness() {
+                const value = Math.round(clamp($('brightness').value, 0, 100) * 255 / 100);
+                const payload = concat(intLE(value, 1), floatLE(getDuration('transition')));
+                sendCommand(ContentType.SET_BRIGHTNESS, payload, 'Brightness')
+            }
+            function zeroBrightness() {
+                const payload = concat(intLE(0, 1), floatLE(getDuration('transition')));
+
+                sendCommand(ContentType.SET_BRIGHTNESS, payload, 'Lights off');
+            }
+            function applyColor() {
+                const count = clamp($('ledCount').value, 1, 65535);
+                const start = target === 'all' ? 0 : clamp($('startLed').value, 0, count - 1);
+                const end = target === 'all' ? count - 1 : clamp($('endLed').value, 0, count - 1);
+                if (end < start) {
+                    toast('End LED must be greater than or equal to start LED.');
+                    return
+                }
+                const n = end - start + 1;
+                if (n > 65535) {
+                    toast('Selected range is too large.');
+                    return
+                }
+                const rgb = currentRGB();
+                const rgbBytes = new Uint8Array(n * 3);
+                for (let i = 0; i < n; i++)
+                    rgbBytes.set(rgb, i * 3);
+                const stream = concat(intLE(start, 2), floatLE(getDuration('colorDuration')), intLE(rgbBytes.length, 4), rgbBytes);
+                sendCommand(ContentType.RGB_STREAM, stream, target === 'all' ? 'Whole-strip color' : 'LED range color')
+            }
+            function playSequence() {
+                const colors = getSequenceColors();
+                const payload = concat(intLE(selectedSequence, 1), floatLE(clamp($('seqSpeed').value, 0, 100)), floatLE(clamp($('seqWidth').value, 0, 65535)), floatLE(clamp($('seqHeight').value, 0, 65535)), intLE($('seqDirection').value, 1), ...colors.map(c => intLE(c, 3)));
+                if (sendCommand(ContentType.SET_SEQUENCE, payload, 'Sequence')) {
+                    $('sequenceStatus').textContent = (seqNames[selectedSequence] || 'Sequence') + ' playing';
+                    $('sequenceSubstatus').textContent = 'Command sent';
+                }
+            }
+            function stopSequence() {
+                const payload = concat(intLE(SequenceType.NONE, 1), floatLE(1), floatLE(0), floatLE(0), intLE(0, 1), ...Array(5).fill(0).map( () => intLE(0, 3)));
+                if (sendCommand(ContentType.SET_SEQUENCE, payload, 'Stop effect')) {
+                    $('sequenceStatus').textContent = 'No sequence';
+                    $('sequenceSubstatus').textContent = 'Stop command sent';
+                }
+            }
+            $('connectBtn').addEventListener('click', connect);
+            $('saveHost').addEventListener('click', connect);
+            $('brightness').addEventListener('input', updateBrightness);
+            $('applyBrightness').addEventListener('click', setBrightness);
+            $('zeroBrightness').addEventListener('click', zeroBrightness);
+            ['red', 'green', 'blue'].forEach(id => $(id).addEventListener('input', updateColorUI));
+            $('hexColor').addEventListener('change', () => {
+                const m = $('hexColor').value.trim().match(/^#?([0-9a-f]{6})$/i);
+                if (!m) {
+                    toast('Enter a valid 6-digit HEX color.');
+                    return
+                }
+                const n = parseInt(m[1], 16);
+                $('red').value = n >> 16 & 255;
+                $('green').value = n >> 8 & 255;
+                $('blue').value = n & 255;
+                updateColorUI()
+            }
+            );
+            document.querySelectorAll('[data-color]').forEach(btn => btn.addEventListener('click', () => {
+                const n = parseInt(btn.dataset.color.slice(1), 16);
+                $('red').value = n >> 16 & 255;
+                $('green').value = n >> 8 & 255;
+                $('blue').value = n & 255;
+                updateColorUI()
+            }
+            ));
+            document.querySelectorAll('[data-target]').forEach(btn => btn.addEventListener('click', () => {
+                target = btn.dataset.target;
+                document.querySelectorAll('[data-target]').forEach(b => b.classList.toggle('active', b === btn));
+                $('rangeFields').classList.toggle('hidden', target === 'all');
+                $('targetHint').textContent = target === 'all' ? 'This color will be sent to every LED in the strip.' : 'Only the selected LED interval will be updated; LED indexes start at 0.';
+            }
+            ));
+            ['startLed', 'endLed', 'ledCount'].forEach(id => $(id).addEventListener('input', () => {
+                ledCount = clamp($('ledCount').value, 1, 65535);
+                $('ledCountStat').textContent = ledCount;
+            }
+            ));
+            $('previewColor').addEventListener('click', () => {
+                toast('Local preview updated — no command sent.')
+            }
+            );
+            $('applyColor').addEventListener('click', applyColor);
+            renderSequenceButtons();
+            bindSequenceColorInputs();
+            $('playSequence').addEventListener('click', playSequence);
+            $('stopSequence').addEventListener('click', stopSequence);
+            $('ledCount').addEventListener('change', () => {
+                const c = clamp($('ledCount').value, 1, 65535);
+                $('ledCount').value = c;
+                $('endLed').max = c - 1;
+                $('startLed').max = c - 1;
+                if (Number($('startLed').value) >= c)
+                    $('startLed').value = c - 1;
+                if (Number($('endLed').value) >= c)
+                    $('endLed').value = c - 1;
+            }
+            );
+            updateBrightness();
+            updateColorUI();
+            $('wsUrl').value = currentWsUrl();
+            $('sequenceStatus').textContent = (seqNames[selectedSequence] || 'Sequence') + ' selected';
+            connect();
+        </script>
+    </body>
+</html>

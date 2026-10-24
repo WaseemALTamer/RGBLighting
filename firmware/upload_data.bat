@@ -2,7 +2,7 @@
 setlocal
 
 set "TARGET=RGBLighting"
-set "PORT=COM3"
+set "PORT=COM7"
 
 set "ROOT=%~dp0"
 set "SKETCH=%ROOT%%TARGET%\main"
